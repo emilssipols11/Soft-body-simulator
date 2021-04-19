@@ -129,17 +129,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named untitled1
+# Target rules for targets named Soft-body-simulator
 
 # Build rule for target.
-untitled1: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 untitled1
-.PHONY : untitled1
+Soft-body-simulator: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Soft-body-simulator
+.PHONY : Soft-body-simulator
 
 # fast build rule for target.
-untitled1/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\untitled1.dir\build.make CMakeFiles/untitled1.dir/build
-.PHONY : untitled1/fast
+Soft-body-simulator/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Soft-body-simulator.dir\build.make CMakeFiles/Soft-body-simulator.dir/build
+.PHONY : Soft-body-simulator/fast
 
 main.obj: main.cpp.obj
 
@@ -147,7 +147,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\untitled1.dir\build.make CMakeFiles/untitled1.dir/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Soft-body-simulator.dir\build.make CMakeFiles/Soft-body-simulator.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -156,7 +156,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\untitled1.dir\build.make CMakeFiles/untitled1.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Soft-body-simulator.dir\build.make CMakeFiles/Soft-body-simulator.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -165,7 +165,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\untitled1.dir\build.make CMakeFiles/untitled1.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Soft-body-simulator.dir\build.make CMakeFiles/Soft-body-simulator.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -176,7 +176,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... untitled1
+	@echo ... Soft-body-simulator
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
