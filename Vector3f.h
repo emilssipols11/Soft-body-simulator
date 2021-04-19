@@ -60,16 +60,16 @@ namespace lmh {
 
         friend Vector3f operator*(const double &lambda, const Vector3f &vec);
 
-        friend std::ostream &operator<<(std::ostream &stream, const Vector3f &vec);
+        friend std::ostream &operator<<(std::ostream &stream, const lmh::Vector3f &vec);
 
     private:
         double x, y, z;
 
     };
+
+    lmh::Vector3f operator*(double &lambda, const lmh::Vector3f &vec);
+
+    std::ostream &operator<<(std::ostream &stream, const lmh::Vector3f &vec);
 }
-    lmh::Vector3f operator*(const double &lambda, const lmh::Vector3f &vec);
-
-    std::ostream& operator<<(const std::ostream &stream, const lmh::Vector3f &vec);
-
 
 #endif
