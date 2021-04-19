@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\Soft-body-simulator.dir/objects.a
+C:\PROGRA~1\MinGW\mingw64\bin\ar.exe cr CMakeFiles\Soft-body-simulator.dir/objects.a @CMakeFiles\Soft-body-simulator.dir\objects1.rsp
+C:\PROGRA~1\MinGW\mingw64\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\Soft-body-simulator.dir/objects.a -Wl,--no-whole-archive -o Soft-body-simulator.exe -Wl,--out-implib,libSoft-body-simulator.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Soft-body-simulator.dir\linklibs.rsp
