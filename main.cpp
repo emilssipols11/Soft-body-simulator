@@ -1,6 +1,7 @@
 #include <iostream>
+#include "Vector2f.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    lmh::Vector2f vector(3, 5);
     return 0;
 }
