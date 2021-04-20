@@ -115,7 +115,7 @@ lmh::Vector2f& lmh::Vector2f::operator*=(const double &lambda) {
     return *this ;
 }
 
-std::ostream& operator << ( std::ostream& stream, const lmh::Vector2f& vec){
+std::ostream& lmh::operator << ( std::ostream& stream, const lmh::Vector2f& vec){
     stream<<"("<<vec.gX() <<", "<<vec.gY()<<")\n";
     return stream;
 }

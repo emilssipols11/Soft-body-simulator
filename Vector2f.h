@@ -63,10 +63,10 @@ namespace lmh {
         double x, y;
 
     };
-}
+
     lmh::Vector2f operator*(const double &lambda, const lmh::Vector2f &vec);
 
-    std::ostream& operator<<(const std::ostream &stream, const lmh::Vector2f &vec);
-
+    std::ostream &operator<<( std::ostream &stream, const lmh::Vector2f &vec);
+}
 
 #endif
