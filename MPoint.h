@@ -13,6 +13,9 @@ public:
     //constructor takes all the parameters using the constructor
     MPoint(lmh::Vector2f  pos, lmh::Vector2f  vel, lmh::Vector2f  force, const double& m);
 
+    //default constructor
+    MPoint() = default;
+
     /*
      * GETTERS AND SETTERS
      * */
@@ -29,7 +32,7 @@ private:
     lmh::Vector2f position;
     lmh::Vector2f velocity;
     lmh::Vector2f force;
-    double mass;
+    double mass{};
 
 };
 

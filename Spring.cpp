@@ -9,10 +9,14 @@ Spring::Spring(const double &k, const double& damping,const double &l0) : k(k), 
 }
 
 double Spring::gLen() const {
-    return this->l;
+    return lmh::Vector2f(this->A.gPos() - this->B.gPos()).norm();
 }
 
-void Spring::sLen(const double &l) {
-    this->l = l;
+void Spring::sA(const MPoint &a) {
+    this->A = a;
+}
+
+void Spring::sB(const MPoint &b) {
+    this->B = b;
 }
 

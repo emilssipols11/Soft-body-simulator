@@ -1,6 +1,7 @@
 //
 // Created by leo on 4/20/21.
 //
+#include "MPoint.h"
 
 #ifndef SOFT_BODY_SIMULATOR_SPRING_H
 #define SOFT_BODY_SIMULATOR_SPRING_H
@@ -13,14 +14,14 @@ public:
     Spring(const double& k, const double& damping, const double& l0);
 
 
+    //get the distance between the two mass points
     double gLen() const;
 
-    void sLen(const double& l);
+    void sA(const MPoint& a);
+    void sB(const MPoint& b);
 
 
 private:
-    //length
-    double l;
 
     //rigidness and damping
     double k;
@@ -28,6 +29,11 @@ private:
 
     //default length (without any force applied)
     double l0;
+
+    //every spring have two mass points
+    MPoint A;
+    MPoint B;
+
 
 };
 
