@@ -20,6 +20,10 @@ public:
     void sA(const MPoint& a);
     void sB(const MPoint& b);
 
+    //calculate force from A's position and B's position
+    //watch out with const
+    //THIS ONE COMPUTES ONLY FOR A
+    lmh::Vector2f compute_force() ;
 
 private:
 
@@ -33,10 +37,7 @@ private:
     //every spring have two mass points
     MPoint A;
     MPoint B;
-    //calculate force from A's position and B's position
-    //watch out with const
-    //THIS ONE COMPUTES ONLY FOR A
-    lmh::Vector2f compute_force() const;
+
 
 };
 

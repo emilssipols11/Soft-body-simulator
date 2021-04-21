@@ -20,10 +20,9 @@ void Spring::sB(const MPoint &b) {
     this->B = b;
 }
 
-lmh::Vector2f Spring::compute_force() const {
-    //F_a = vec{B} - vec{A}
+lmh::Vector2f Spring::compute_force() {
     lmh::Vector2f F = (B.gPos() - A.gPos());
-    F = k*(F - l0*F.normalize(F));
+    F = (F.normalize(F)*(-l0+F.norm()))*(k);
     return F;
 
 }
