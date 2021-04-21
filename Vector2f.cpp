@@ -1,6 +1,7 @@
 #include "Vector2f.h"
 #include <iostream>
 #include <cmath>
+#include <utility>
 
 
 /**
@@ -139,6 +140,7 @@ lmh::Vector2f& lmh::Vector2f::operator=(const Vector2f &vec) {
 }
 
 lmh::Vector2f& lmh::Vector2f::operator=(Vector2f &&vec) noexcept {
+
     this->x = vec.x;
     this->y = vec.y;
 
@@ -148,6 +150,13 @@ lmh::Vector2f& lmh::Vector2f::operator=(Vector2f &&vec) noexcept {
 
     return (*this);
  }
+
+lmh::Vector2f lmh::Vector2f::normalize() {
+    this->x = (this->x)*(1/(this->norm()));
+    this->y = (this->y)*(1/(this->norm()));
+
+    return (*this);
+}
 
 
 

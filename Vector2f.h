@@ -34,6 +34,7 @@ namespace lmh {
         double dot(const Vector2f &vec) const;
 
         Vector2f normalize(const Vector2f &vec) const;
+        Vector2f normalize();
 
 
         //ASSIGNMENT OPERATORS
