@@ -15,7 +15,7 @@ namespace lmh {
 
         Vector2f(Vector2f &&vec) noexcept;
 
-        Vector2f() = delete;
+        Vector2f() = default;
 
         //GETTERS AND SETTERS
         double gX() const;
@@ -60,13 +60,13 @@ namespace lmh {
         friend std::ostream &operator<<(std::ostream &stream, const Vector2f &vec);
 
     private:
-        double x, y;
+        double x{}, y{};
 
     };
-}
+
     lmh::Vector2f operator*(const double &lambda, const lmh::Vector2f &vec);
 
-    std::ostream& operator<<(const std::ostream &stream, const lmh::Vector2f &vec);
-
+    std::ostream &operator<<( std::ostream &stream, const lmh::Vector2f &vec);
+}
 
 #endif
