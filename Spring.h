@@ -17,8 +17,10 @@ public:
     //get the distance between the two mass points
     double gLen() const;
 
-    void sA(const MPoint& a);
-    void sB(const MPoint& b);
+
+    void sA( MPoint* a);
+    void sB( MPoint* b);
+
 
     //calculate force from A's position and B's position
     //watch out with const
@@ -35,8 +37,8 @@ private:
     double l0;
 
     //every spring have two mass points
-    MPoint A;
-    MPoint B;
+    MPoint* A;
+    MPoint* B;
 
 
 };

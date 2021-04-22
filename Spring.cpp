@@ -12,16 +12,17 @@ double Spring::gLen() const {
     return lmh::Vector2f(this->A.gPos() - this->B.gPos()).norm();
 }
 
-void Spring::sA(const MPoint &a) {
+void Spring::sA( MPoint* a) {
     this->A = a;
 }
 
-void Spring::sB(const MPoint &b) {
+void Spring::sB( MPoint *b) {
     this->B = b;
 }
 
+
 lmh::Vector2f Spring::compute_force() {
-    lmh::Vector2f F = (B.gPos() - A.gPos());
+    lmh::Vector2f F = (B->gPos() - A->gPos());
     F = (F.normalize(F)*(-l0+F.norm()))*(k);
     return F;
 
