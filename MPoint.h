@@ -26,6 +26,7 @@ public:
     lmh::Vector2f gPos() const;
     lmh::Vector2f gVel() const;
     lmh::Vector2f gForce() const;
+    double gMass() const;
 
 
 private:

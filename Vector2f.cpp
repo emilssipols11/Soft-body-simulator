@@ -74,7 +74,7 @@ double lmh::Vector2f::dot(const Vector2f& vec) const {
 }
 
 lmh::Vector2f lmh::Vector2f::normalize(const Vector2f &vec) const {
-    return Vector2f((*this)*(1/(this->norm())));
+    return Vector2f((vec)*(1/(this->norm())));
 }
 /**
  *
@@ -106,9 +106,6 @@ lmh::Vector2f lmh::Vector2f::operator*(const double &lambda) const {
     return {this->x * lambda , this->y * lambda };
 }
 
-lmh::Vector2f operator * (const double& lambda, const lmh::Vector2f& vec) {
-    return {vec.gX() * lambda , vec.gY() * lambda };
-}
 
 lmh::Vector2f& lmh::Vector2f::operator*=(const double &lambda) {
     this->x *= lambda;

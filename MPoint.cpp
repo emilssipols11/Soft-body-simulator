@@ -34,4 +34,8 @@ lmh::Vector2f MPoint::gForce() const {
     return this->force;
 }
 
+double MPoint::gMass() const {
+    return this->mass;
+}
+
 

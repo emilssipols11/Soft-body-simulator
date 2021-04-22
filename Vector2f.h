@@ -2,7 +2,7 @@
 
 #ifndef Vector2f_H
 #define Vector2f_H
-#define DEBUG_CONSTRUCTORS
+#define DEBUG_CONSTRUCTOR
 
 namespace lmh {
 
@@ -56,16 +56,12 @@ namespace lmh {
 
         Vector2f &operator*=(const double &lambda);
 
-        friend Vector2f operator*(const double &lambda, const Vector2f &vec);
-
         friend std::ostream &operator<<(std::ostream &stream, const Vector2f &vec);
 
     private:
         double x{}, y{};
 
     };
-
-    lmh::Vector2f operator*(const double &lambda, const lmh::Vector2f &vec);
 
     std::ostream &operator<<( std::ostream &stream, const lmh::Vector2f &vec);
 }
