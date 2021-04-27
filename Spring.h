@@ -20,6 +20,8 @@ public:
 
     void sA( MPoint* a);
     void sB( MPoint* b);
+    double gK() const;
+    double gl0() const;
 
 
     //calculate force from A's position and B's position
