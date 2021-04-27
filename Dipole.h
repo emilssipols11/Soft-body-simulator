@@ -2,6 +2,10 @@
 // Created by leokr on 4/22/2021.
 //
 #include "Spring.h"
+#include <array>
+#include <vector>
+#include <functional>
+
 #ifndef SOFT_BODY_SIMULATOR_DIPOLE_H
 #define SOFT_BODY_SIMULATOR_DIPOLE_H
 class Dipole{
@@ -17,11 +21,20 @@ public:
 
     void simulate_euler();
 
+    void simulate_RK4();
+
+    std::function<double (double)> F;
+
+
+
 
 private:
     MPoint A;
     MPoint B;
     Spring spr;
+
+    std::array<double , 2> comp_next(std::vector<double>& x, std::vector<double>& v, int n);
+
 
 };
 

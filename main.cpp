@@ -16,7 +16,7 @@ int main() {
     Dipole dip(points[1], points[0], spr );
     Dipole* pd = &dip;
     std::cout<<sizeof(pd);
-    //dip.simulate_euler();
+    dip.simulate_RK4();
 
     //simulate();
 
