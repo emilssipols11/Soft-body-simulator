@@ -6,6 +6,7 @@
 
 Spring::Spring(const double &k, const double& damping,const double &l0) : k(k), damping(damping), l0(l0) {
 
+
 }
 
 double Spring::gLen() const {

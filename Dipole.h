@@ -19,11 +19,14 @@ public:
     void sA(const MPoint&);
     void sB(const MPoint&);
 
+    //TO DELETE
     void simulate_euler();
 
+    //TO DELETE
     void simulate_RK4();
 
-    std::function<double (double)> F;
+    //TO DELETE
+    lmh::Vector2f diffeq(const lmh::Vector2f&,const lmh::Vector2f&);
 
 
 
@@ -33,7 +36,7 @@ private:
     MPoint B;
     Spring spr;
 
-    std::array<double , 2> comp_next(std::vector<double>& x, std::vector<double>& v, int n);
+    //std::array<double , 2> comp_next(std::vector<double>& x, std::vector<double>& v, int n);
 
 
 };
