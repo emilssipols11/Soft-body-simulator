@@ -23,7 +23,7 @@ public:
     void simulate_euler();
 
     //TO DELETE
-    void simulate_RK4();
+    //void simulate_RK4();
 
     //TO DELETE
     lmh::Vector2f diffeq(const lmh::Vector2f&,const lmh::Vector2f&);

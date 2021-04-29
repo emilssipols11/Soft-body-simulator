@@ -65,7 +65,7 @@ void Dipole::simulate_euler() {
     file.close();
 }
 
-void Dipole::simulate_RK4() {
+/*void Dipole::simulate_RK4() {
 
 
     double t = 0;
@@ -114,7 +114,7 @@ void Dipole::simulate_RK4() {
 
     file.close();
 
-}
+}*/
 
 
 void Dipole::sA(const MPoint & a) {
@@ -128,8 +128,17 @@ void Dipole::sB(const MPoint & b) {
 
 lmh::Vector2f Dipole::diffeq(const lmh::Vector2f &,const lmh::Vector2f &) {
     //The force acting on A!
+    //  a = k(lo - x)/M
 
     return lmh::Vector2f(
-            (this->B.gPos() - this->gA().gPos()).normalize()*(this->spr.gl0() - lmh::Vector2f(this->B.gPos() - this->gA().gPos()).norm())*(this->spr.gK())
+            ( this->gA().gPos()).normalize()*(this->spr.gl0() - lmh::Vector2f(this->gA().gPos() - this->B.gPos()).norm())*(this->spr.gK())
     );
+}
+
+MPoint Dipole::gA() const {
+    return this->A;
+}
+
+MPoint Dipole::gB() const {
+    return this->B;
 }

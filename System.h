@@ -13,12 +13,19 @@ public:
     System(const Dipole& dip);
 
 
-    void simulate();
+    void simulate(const double&max_time);
+    void write_to_file();
 
 private:
     // the dipole
     Dipole dip;
+
+    //time increment
+    double dt = 0.05;
     std::array<lmh::Vector2f, 2> comp_next( lmh::Vector2f& prev_pos, lmh::Vector2f& prev_vel);
+
+    //tempoprary structure to store data (position and velocity)
+    std::array<std::vector<lmh::Vector2f>, 2> data;
 
 
 

@@ -3,6 +3,8 @@
 //
 
 #include "System.h"
+#include <fstream>
+
 
 System::System(const Dipole &dip) : dip(dip) {
 
@@ -30,5 +32,43 @@ std::array<lmh::Vector2f, 2> System::comp_next(lmh::Vector2f& prev_pos, lmh::Vec
 
 
     return std::array<lmh::Vector2f, 2> { prev_pos + dx , prev_vel + dv};
+}
+
+
+
+void System::simulate(const double& max_time) {
+    double time = 0.0;
+    this->data.at(0).push_back(dip.gA().gPos());
+    this->data.at(1).push_back(dip.gA().gVel());
+
+    int n = 0;
+
+    std::array<lmh::Vector2f, 2> temp;
+
+    while (time<max_time){
+        //evaluate the expression after dt
+        temp = this->comp_next(this->data.at(0)[n], this->data.at(1)[n]);
+
+        //update the position of the dipole
+        this->dip.sA(MPoint(temp[0], temp[1], lmh::Vector2f(0.0, 0.0), dip.gA().gMass()));
+
+        this->data[0].push_back(temp[0]);
+        this->data[1].push_back(temp[1]);
+
+        n++;
+
+        time+=dt;
+    }
+
+
+}
+
+void System::write_to_file() {
+    std::ofstream file("../system.txt");
+    for(int i =0; i<this->data[0].size(); i++){
+        file<<this->data[0].at(i).gX() <<"\t"<<this->data[0].at(i).gY()<<"\n";
+    }
+
+    file.close();
 }
 
