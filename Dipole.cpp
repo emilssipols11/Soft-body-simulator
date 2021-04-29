@@ -65,7 +65,7 @@ void Dipole::simulate_euler() {
     file.close();
 }
 
-void Dipole::simulate_RK4() {
+/*void Dipole::simulate_RK4() {
 
 
     double t = 0;
@@ -114,7 +114,7 @@ void Dipole::simulate_RK4() {
 
     file.close();
 
-}
+}*/
 
 
 void Dipole::sA(const MPoint & a) {
@@ -125,26 +125,20 @@ void Dipole::sB(const MPoint & b) {
     this->B = b;
 }
 
-std::array<double, 2> Dipole::comp_next(std::vector<double>& pos, std::vector<double>& vel, int n) {
 
-    double dx1, dx2, dx3, dx4, dv1, dv2, dv3, dv4;
-    double h = 0.05;
+lmh::Vector2f Dipole::diffeq(const lmh::Vector2f &,const lmh::Vector2f &) {
+    //The force acting on A!
+    //  a = k(lo - x)/M
 
-    dx1 = h*vel[n];
-    dv1 = h*F(pos[n]);
-    dx2 = h*(vel[n] + dv1/2);
-    dv2 = h*F(pos[n]+dx1/2);
-    dx3 = h*(vel[n] + dv2/2);
-    dv3 = h*F(pos[n] + dx2/2);
-    dx4 = h*(vel[n] + dv3);
-    dv4 = h*F(pos[n] + dx3);
-
-    double dv = (dv1 + 2*dv2 + 2*dv3 + dv4)/6.0;
-    double dx = (dx1 + 2*dx2 + 2*dx3 + dx4)/6.0;
-
-
-    return std::array<double, 2> { pos[n] + dx , vel[n] + dv};
-
-
+    return lmh::Vector2f(
+            ( this->gA().gPos()).normalize()*(this->spr.gl0() - lmh::Vector2f(this->gA().gPos() - this->B.gPos()).norm())*(this->spr.gK())
+    );
 }
 
+MPoint Dipole::gA() const {
+    return this->A;
+}
+
+MPoint Dipole::gB() const {
+    return this->B;
+}

@@ -2,6 +2,7 @@
 // Created by leo on 4/20/21.
 //
 #include "MPoint.h"
+#include <functional>
 
 #ifndef SOFT_BODY_SIMULATOR_SPRING_H
 #define SOFT_BODY_SIMULATOR_SPRING_H
@@ -34,6 +35,9 @@ private:
     //rigidness and damping
     double k;
     double damping;
+
+    //returns the function that needs to be solved
+
 
     //default length (without any force applied)
     double l0;
