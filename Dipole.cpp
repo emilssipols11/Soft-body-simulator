@@ -126,13 +126,18 @@ void Dipole::sB(const MPoint & b) {
 }
 
 
-lmh::Vector2f Dipole::diffeq(const lmh::Vector2f &,const lmh::Vector2f &) {
+lmh::Vector2f Dipole::diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f target_vel ,const lmh::Vector2f& current_vel) {
     //The force acting on A!
     //  a = k(lo - x)/M
 
-    return lmh::Vector2f(
+    /*return lmh::Vector2f(
             ( this->gA().gPos()).normalize()*(this->spr.gl0() - lmh::Vector2f(this->gA().gPos() - this->B.gPos()).norm())*(this->spr.gK())
+    );*/
+
+    return lmh::Vector2f(
+            ((target_pos-current_pos)*(this->spr.gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->spr.gK()
     );
+
 }
 
 MPoint Dipole::gA() const {

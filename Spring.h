@@ -14,6 +14,11 @@ public:
     // - it is set to l0 in the constructor
     Spring(const double& k, const double& damping, const double& l0);
 
+    //default constructor initializes A and B
+    Spring(){
+        this->A = nullptr;
+        this->B = nullptr;
+    }
 
     //get the distance between the two mass points
     double gLen() const;
@@ -30,6 +35,9 @@ public:
     //THIS ONE COMPUTES ONLY FOR A
     lmh::Vector2f compute_force() ;
 
+    MPoint* gA() const;
+    MPoint* gB() const;
+
 private:
 
     //rigidness and damping
@@ -45,8 +53,6 @@ private:
     //every spring have two mass points
     MPoint* A;
     MPoint* B;
-
-
 };
 
 #endif //SOFT_BODY_SIMULATOR_SPRING_H

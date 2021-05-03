@@ -36,3 +36,11 @@ double Spring::gl0() const {
     return l0;
 }
 
+MPoint* Spring::gA() const {
+    return this->A;
+}
+
+MPoint* Spring::gB() const{
+    return this->B;
+}
+
