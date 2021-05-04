@@ -26,7 +26,7 @@ public:
     //void simulate_RK4();
 
     //TO DELETE
-    lmh::Vector2f diffeq(const lmh::Vector2f&,const lmh::Vector2f&);
+    lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f target_vel ,const lmh::Vector2f& current_vel);
 
 
 

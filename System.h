@@ -10,21 +10,35 @@ class System{
 public:
     // Constructor setting all the variables of the class
     // dip - the Dipole
-    System(const Dipole& dip);
+    System();
+    //we initialize the system
 
 
+    //function that simulates the motion of a dipole till max_time
+    //and stores it in the std::array<std::vector<lmh::Vector2f>, 2> data;
     void simulate(const double&max_time);
+
+    //reads writes the     std::array<std::vector<lmh::Vector2f>, 2> data;
+    //to a file "system.txt"
     void write_to_file();
+
+    //DEPRECATED
+    //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
 
 private:
     // the dipole
-    Dipole dip;
+    // Dipole dip;
+
+    // the mass points
+    std::vector<MPoint*> mPoints;
 
     //time increment
-    double dt = 0.05;
-    std::array<lmh::Vector2f, 2> comp_next( lmh::Vector2f& prev_pos, lmh::Vector2f& prev_vel);
+    double dt = 0.01;
 
-    //tempoprary structure to store data (position and velocity)
+    //the RK4 method that gives f(t+dt)
+    //std::array<lmh::Vector2f, 2> comp_next(const int&);
+
+    //temporary structure to store data (position and velocity)
     std::array<std::vector<lmh::Vector2f>, 2> data;
 
 
