@@ -23,20 +23,20 @@ public:
     void write_to_file();
 
     //DEPRECATED
-    std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
+    //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
 
 private:
     // the dipole
     // Dipole dip;
 
     // the mass points
-    std::vector<MPoint> mPoints;
+    std::vector<MPoint*> mPoints;
 
     //time increment
     double dt = 0.01;
 
     //the RK4 method that gives f(t+dt)
-    std::array<lmh::Vector2f, 2> comp_next( lmh::Vector2f& prev_pos, lmh::Vector2f& prev_vel);
+    //std::array<lmh::Vector2f, 2> comp_next(const int&);
 
     //temporary structure to store data (position and velocity)
     std::array<std::vector<lmh::Vector2f>, 2> data;

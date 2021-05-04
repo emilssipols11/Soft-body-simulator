@@ -7,6 +7,7 @@
 #define SOFT_BODY_SIMULATOR_MPOINT_H
 #include "Vector2f.h"
 #include <vector>
+#include <array>
 
 class Spring;
 
@@ -28,11 +29,13 @@ public:
 
     lmh::Vector2f gPos() const;
     lmh::Vector2f gVel() const;
-    lmh::Vector2f gForce() ;
+    lmh::Vector2f gForce();
+    lmh::Vector2f gForce(const lmh::Vector2f& dx, const lmh::Vector2f& dv) ;
     double gMass() const;
 
     //set the attached springs to a masspoint
     void attach_spring(Spring& s);
+    std::array<lmh::Vector2f, 2> comp_next(const int&);
 
 
 private:

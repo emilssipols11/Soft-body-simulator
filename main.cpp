@@ -19,10 +19,8 @@ int main() {
 
     Dipole dip(points[1], points[0], spr );
 
-    System sys(dip);
+    System sys;
     sys.simulate(10.0);
-    sys.write_to_file();
-    cosine();
 
 
     return 0;
