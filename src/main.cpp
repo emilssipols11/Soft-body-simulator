@@ -4,7 +4,10 @@
 #include "System.h"
 #include <vector>
 #include <fstream>
-#include <math.h>
+#include "Window.h"
+#include <cmath>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 //void simulate();
 
@@ -23,6 +26,51 @@ int main() {
     sys.simulate(10.0);
     cosine();
     std::cout<<"ICCE\n";
+
+
+
+    Window w(600,900);
+
+    //auto err = glfwInit();
+
+    /*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, 3);
+
+    if (!glfwInit()){
+        std::cerr<<"Unable to initialize glfw\n"
+                 <<"aborting the program";
+        exit(-1);
+    }
+
+
+
+
+    win = glfwCreateWindow(600, 200, "GLFW Window", NULL, NULL);
+
+    if(!win){
+        glfwTerminate();
+    }
+
+    glfwMakeContextCurrent(win);
+
+    if(glewInit()!=GLEW_OK){
+        std::cerr<<"glew initialized incorrectly\n";
+    }
+
+    while(!glfwWindowShouldClose(win)){
+
+
+
+
+        glfwSwapBuffers(win);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();*/
+
+
+
 
 
     return 0;
