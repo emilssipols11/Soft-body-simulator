@@ -31,47 +31,16 @@ int main() {
 
     Window w(600,900);
 
-    //auto err = glfwInit();
+    w.print_used_GPU();
 
-    /*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, 3);
+    while (!w.window_closed()){
 
-    if (!glfwInit()){
-        std::cerr<<"Unable to initialize glfw\n"
-                 <<"aborting the program";
-        exit(-1);
+
+        w.swap_buffers();
+        w.poll_events();
     }
 
-
-
-
-    win = glfwCreateWindow(600, 200, "GLFW Window", NULL, NULL);
-
-    if(!win){
-        glfwTerminate();
-    }
-
-    glfwMakeContextCurrent(win);
-
-    if(glewInit()!=GLEW_OK){
-        std::cerr<<"glew initialized incorrectly\n";
-    }
-
-    while(!glfwWindowShouldClose(win)){
-
-
-
-
-        glfwSwapBuffers(win);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();*/
-
-
-
-
+    w.terminate_window();
 
     return 0;
 }

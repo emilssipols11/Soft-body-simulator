@@ -9,7 +9,9 @@ public:
     Window(const unsigned int&h, const unsigned int&w);
     bool window_closed();
     void terminate_window();
-
+    void swap_buffers();
+    void poll_events();
+    void print_used_GPU();
 private:
     GLFWwindow** win;
 };
