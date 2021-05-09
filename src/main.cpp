@@ -35,7 +35,6 @@ int main() {
 
     while (!w.window_closed()){
 
-
         w.swap_buffers();
         w.poll_events();
     }
