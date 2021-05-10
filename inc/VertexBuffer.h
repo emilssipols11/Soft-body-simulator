@@ -14,8 +14,6 @@ public:
 
     ~VertexBuffer();
 
-
-
 private:
     unsigned int vboID;
 

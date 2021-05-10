@@ -13,36 +13,23 @@ struct VertexBufferElement{
 
 class VertexBufferLayout{
 public:
-    VertexBufferLayout();
+    VertexBufferLayout() : stride(0) {};
 
     //push the element
     //the template to use the type to VertexAttribPointer
 
-    template<typename T>
-    void push(int count){
-        static_assert(false);
+    template<typename T = float>
+    void push(unsigned int count){
+        elements.push_back({GL_FLOAT, count, GL_FALSE});
+        this->stride += 4;
     }
 
-    template<>
-    void push<float>(int count, bool normalized = false){
-        elements.push_back({GL_FLOAT, count, normalized});
-        this->stride+=sizeof(GLfloat);
-    }
+    inline unsigned int gStride(){return this->stride;}
 
-    template<>
-    void push<unsigned int>(int count, bool normalized = false){
-        this->elements.push_back({GL_UNSIGNED_INT, count, normalized});
-        this->stride+=sizeof(GLuint);
-    }
+    inline const std::vector<VertexBufferElement> & gElements() const {return this->elements;}
 
-    template<>
-    void push<unsigned char>(int count, bool normalized = false){
-        elements.push_back({GL_UNSIGNED_BYTE, count, normalized});
-        this->stride+=sizeof(GLbyte);
-    }
 
-    inline const& std::vector<VertexBufferElement> get_elements() const { return this->elements; }
-    inline unsigned int get_stride() const {return this->stride;}
+
 
 
 private:

@@ -1,4 +1,2 @@
-//
-// Created by leo on 5/9/21.
-//
+#include "VertexBufferLayout.h"
 

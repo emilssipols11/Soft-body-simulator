@@ -30,8 +30,8 @@ std::stringstream vertexStream;
 
     try {
 
-        frag.open(vertexsh);
-        fragmentStream<<vert.rdbuf();
+        frag.open(fragmentsh);
+        fragmentStream<<frag.rdbuf();
         frag.close();
 
         this->fragment_shader = fragmentStream.str();
@@ -51,9 +51,13 @@ void Shader::compile_and_link() {
     int success;
     char info[512];
 
-    const char* vShaderCode = vertex_shader.c_str();
-    const char* fShaderCode = fragment_shader.c_str();
 
+
+    const char* vShaderCode = vertex_shader.c_str();
+    const char*  fShaderCode = fragment_shader.c_str();
+
+
+    //std::cout<<""<<std::endl;
     vertexID = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexID, 1, &vShaderCode, NULL);
     glCompileShader(vertexID);
@@ -75,6 +79,7 @@ void Shader::compile_and_link() {
     //handle errors
     if (!success){
         glGetShaderInfoLog(fragmentID, 512, NULL, info);
+        std::cerr<<"ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"<<info<<std::endl;
     }
 
     /*

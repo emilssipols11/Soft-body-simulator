@@ -5,9 +5,7 @@ Window::Window(const unsigned int &h, const unsigned int &w) {
     //create the GLFWwindow
     //GLFWwindow is a pointer, thus n is a pointer to a pointer
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, 4);
+
     win = new GLFWwindow*;
 
     if (!glfwInit()){
@@ -16,17 +14,22 @@ Window::Window(const unsigned int &h, const unsigned int &w) {
         exit(-1);
     }
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     *win = glfwCreateWindow(600, 200, "GLFW Window", NULL, NULL);
+    glfwMakeContextCurrent(*win);
 
     if(!*win){
         glfwTerminate();
+        exit(-1);
     }
 
-    glfwMakeContextCurrent(*win);
 
     if(glewInit()!=GLEW_OK){
         std::cerr<<"glew initialized incorrectly\n";
+        exit(-1);
     }
 
 

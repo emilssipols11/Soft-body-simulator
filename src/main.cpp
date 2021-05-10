@@ -8,10 +8,31 @@
 #include <cmath>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "VertexArray.h"
+#include "Shader.h"
 
 //void simulate();
 
 static void cosine();
+
+
+const char *vertexShaderSource = "#version 330 core\n"
+                                 "layout (location = 0) in vec3 aPos;\n"
+                                 "uniform vec3 offSet;\n"
+                                 "void main()\n"
+                                 "{\n"
+                                 "   gl_Position = vec4(-aPos.x + offSet.x, -aPos.y + offSet.y, -aPos.z + offSet.z, 1.0);\n"
+                                 "}\0";
+
+
+const char *fragmentShaderSource = "#version 330 core\n"
+                                   "out vec4 FragColor;\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "   FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f );\n"
+                                   "}\0";
+
+
 
 int main() {
     MPoint points[2]  {
@@ -24,16 +45,40 @@ int main() {
 
     System sys;
     sys.simulate(10.0);
-    cosine();
-    std::cout<<"ICCE\n";
 
 
+
+
+    float positions[]={
+            -0.5f, -0.5f,
+            0.5f, -0.5f,
+            0.5f, 0.5f,
+    };
 
     Window w(600,900);
 
     w.print_used_GPU();
 
+
+    Shader sh("/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/vshader.glsl" ,"/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/fshader.glsl");
+    sh.compile_and_link();
+    sh.use();
+
+    VertexArray va;
+    va.bind();
+
+    VertexBuffer vb(positions, sizeof(positions));
+    vb.bind();
+    va.add_buffer(vb);
+
+
     while (!w.window_closed()){
+
+        va.bind();
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0,3);
 
         w.swap_buffers();
         w.poll_events();
