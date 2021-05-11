@@ -4,6 +4,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+/*
+ * DEPRECATED CLASS THAT IS CURRENTLY UNUSED
+ */
 struct VertexBufferElement{
     unsigned int type;
     unsigned int count;

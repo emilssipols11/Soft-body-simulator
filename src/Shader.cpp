@@ -111,3 +111,12 @@ void Shader::compile_and_link() {
 void Shader::use() {
     glUseProgram(this->ID);
 }
+
+unsigned int Shader::gID() const {
+    return this->ID;
+}
+
+void Shader::sUniformVec3(const std::string &name, const float &x, const float &y, const float &z) {
+    int vertexColorLocation = glGetUniformLocation(this->ID, name.c_str());
+    glUniform3f(vertexColorLocation, x, y, z);
+}

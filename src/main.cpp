@@ -10,28 +10,11 @@
 #include <GLFW/glfw3.h>
 #include "VertexArray.h"
 #include "Shader.h"
+#include "IndexBuffer.h"
 
 //void simulate();
 
 static void cosine();
-
-
-const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "uniform vec3 offSet;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   gl_Position = vec4(-aPos.x + offSet.x, -aPos.y + offSet.y, -aPos.z + offSet.z, 1.0);\n"
-                                 "}\0";
-
-
-const char *fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "   FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f );\n"
-                                   "}\0";
-
 
 
 int main() {
@@ -50,15 +33,21 @@ int main() {
 
 
     float positions[]={
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f, 0.5f,
+            -0.5f, -0.5f, 0.0f,
+            -0.5f, 0.5f, 0.0f,
+            0.5f, 0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f
+            //0.5f, 0.5f, 0.0f,
+            //0.5f, -0.5f, 0.0f,
+            //-0.5f, 0.5f, 0.0f
     };
 
-    Window w(600,900);
+    unsigned int indices[]{
+        0,1,2,
+        2,3,0
+    };
 
-    w.print_used_GPU();
-
+    Window w(640,480);
 
     Shader sh("/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/vshader.glsl" ,"/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/fshader.glsl");
     sh.compile_and_link();
@@ -69,16 +58,21 @@ int main() {
 
     VertexBuffer vb(positions, sizeof(positions));
     vb.bind();
+
+    IndexBuffer ib(indices, sizeof(indices));
+
+    ib.bind();
+
     va.add_buffer(vb);
 
 
     while (!w.window_closed()){
 
-        va.bind();
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0,3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        //glDrawArrays(GL_LINES, 0,2);
 
         w.swap_buffers();
         w.poll_events();

@@ -10,7 +10,6 @@
 class Shader{
 public:
     //the id of the programm
-    unsigned int ID;
 
     //pass the file arguments
     Shader(const std::string& vertexsh, const std::string& fragmentsh);
@@ -21,9 +20,15 @@ public:
     //use the shader program
     void use();
 
+    unsigned int gID() const;
+
+    //sets the new uniform to the shader
+    void sUniformVec3(const std::string& name, const float& x, const float& y, const float& z = 0.0f);
+
 private:
     std::string vertex_shader;
     std::string fragment_shader;
+    unsigned int ID;
 
 
 };
