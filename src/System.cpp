@@ -156,6 +156,12 @@ void System::write_to_file() {
     file.close();
 }
 
+System::~System() {
+    for (int i = 0; i < this->mPoints.size(); ++i) {
+        delete mPoints[i];
+    }
+}
+
 /*std::array<lmh::Vector2f, 2> System::simulate_euler(const double &max) {
     lmh::Vector2f dv;
     lmh::Vector2f dx;

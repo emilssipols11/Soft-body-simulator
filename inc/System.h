@@ -25,6 +25,9 @@ public:
     //DEPRECATED
     //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
 
+    //delete the with "new" allocated MPoints* in the std::vector
+    ~System();
+
 private:
     // the dipole
     // Dipole dip;

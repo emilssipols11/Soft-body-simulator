@@ -18,7 +18,7 @@ Window::Window(const unsigned int &h, const unsigned int &w) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    *win = glfwCreateWindow(600, 200, "GLFW Window", NULL, NULL);
+    *win = glfwCreateWindow(1920, 1080, "GLFW Window", NULL, NULL);
     glfwMakeContextCurrent(*win);
 
     if(!*win){

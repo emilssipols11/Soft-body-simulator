@@ -7,9 +7,13 @@
 
 class VertexArray{
 public:
+    //generation
     VertexArray();
+
+    //deletion
     ~VertexArray();
 
+    //hardcoded version of VertexAttribPointer
     void add_buffer( VertexBuffer&);
     void bind() const;
     void unbind() const;
