@@ -14,7 +14,7 @@ include_directories(
         #"${CMAKE_BINARY_DIR}/inc"
 )
 
-target_link_libraries(Sources -lglut -lglfw -lGLEW -lGL -lGLU)
+target_link_libraries(Sources -lglfw -lGLEW -lGL -lGLU -lsfml-graphics -lsfml-window -lsfml-system)
 
 
 

@@ -11,6 +11,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "IndexBuffer.h"
+#include <SFML/Graphics.hpp>
 
 //void simulate();
 
@@ -27,12 +28,12 @@ int main() {
     Dipole dip(points[1], points[0], spr );
 
     System sys;
-    sys.simulate(10.0);
+    sys.simulate(1000.0);
 
 
 
 
-    float positions[]={
+    /*float positions[]={
             -0.5f, -0.5f, 0.0f,
             -0.5f, 0.5f, 0.0f,
             0.5f, 0.5f, 0.0f,
@@ -80,7 +81,7 @@ int main() {
 
     w.terminate_window();
 
-    return 0;
+    return 0;*/
 }
 
 void cosine(){

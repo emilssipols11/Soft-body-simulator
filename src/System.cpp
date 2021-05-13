@@ -5,16 +5,22 @@
 #include "System.h"
 #include <fstream>
 #include "MPoint.h"
+#include "Window.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include <SFML/Graphics.hpp>
 
 
 System::System()  {
-    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0, 12.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0, 120.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
     MPoint *mp2 = new MPoint(lmh::Vector2f(0.0, 0.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint *mp3 = new MPoint(lmh::Vector2f(10.39230484541326376116, 6.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp3 = new MPoint(lmh::Vector2f(103.9230484541326376116, 60.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
 
-    Spring spr1(100.0, 3, 10.0);
-    Spring spr2(100.0, 3, 10.0);
-    Spring spr3 (100.0, 3, 10.0);
+    Spring spr1(100.0, 3, 100.0);
+    Spring spr2(100.0, 3, 100.0);
+    Spring spr3 (100.0, 3, 100.0);
 
 
     spr1.sA(mp1);
@@ -35,8 +41,13 @@ System::System()  {
     mPoints.push_back(mp1);
     mPoints.push_back(mp2);
     mPoints.push_back(mp3);
+
+    mp1->sDamp(0.5);
+    mp2->sDamp(0.5);
+    mp3->sDamp(4);
 }
 
+/*
 //the argument must be the mpoint
 //std::array<lmh::Vector2f, 2> System::comp_next(const int& i) {
 //
@@ -65,7 +76,7 @@ System::System()  {
 //
 //
 //    return std::array<lmh::Vector2f, 2> { prev_pos + dx , prev_vel + dv};
-//}
+//}*/
 
 
 
@@ -85,13 +96,24 @@ void System::simulate(const double& max_time) {
 
 
     std::array<lmh::Vector2f, 2> temp;
-    std::vector<MPoint> temp_mpoints = {MPoint(lmh::Vector2f(0,0), lmh::Vector2f(0,0), lmh::Vector2f(0,0), 0),
-                                        MPoint(lmh::Vector2f(0,0), lmh::Vector2f(0,0), lmh::Vector2f(0,0), 0),
-                                        MPoint(lmh::Vector2f(0,0), lmh::Vector2f(0,0), lmh::Vector2f(0,0), 0)};
-    //temp_mpoints.resize(mPoints.size());
+    std::vector<MPoint> temp_mpoints = {MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
+                                        MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
+                                        MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0)};
 
-    while (time<max_time){
 
+
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
+
+    std::vector<sf::CircleShape> shapes {
+        sf::CircleShape(7, 6),
+        sf::CircleShape(7, 6),
+        sf::CircleShape(7, 6)
+    };
+
+    window.setFramerateLimit(30);
+
+
+    while (time < max_time && window.isOpen()) {
 
         // for loop that iterates on mPoints
 
@@ -114,53 +136,59 @@ void System::simulate(const double& max_time) {
             this->mPoints[i]->sVel(temp_mpoints[i].gVel());
         }
 
-        //compute the energy
-        double energy = 50*((mPoints[1]->gPos() - mPoints[0]->gPos()).norm()-10)*((mPoints[1]->gPos() - mPoints[0]->gPos()).norm()-10) +
-                0.5*mPoints[0]->gVel().norm()*mPoints[0]->gVel().norm() + 0.5*mPoints[1]->gVel().norm()*mPoints[1]->gVel().norm();
-        std::cout<<energy<<std::endl;
 
-        //file<<time;
-        // write to file
         for (int i = 0; i < this->mPoints.size(); ++i) {
-            file<<this->mPoints[i]->gPos().gX()<<"\t"<<this->mPoints[i]->gPos().gY()<<"\t";
+            file << this->mPoints[i]->gPos().gX() << "\t" << this->mPoints[i]->gPos().gY() << "\t";
         }
-        file<<"\n";
-
-        /*//evaluate the expression after dt
-        temp = this->comp_next(this->data.at(0)[n], this->data.at(1)[n]);
-
-        //update the position of the masspoint
-        this->dip.sA(MPoint(temp[0], temp[1], lmh::Vector2f(0.0, 0.0), dip.gA().gMass()));
-
-        //store the data in the std::vector
-        this->data[0].push_back(temp[0]);
-        this->data[1].push_back(temp[1]);
+        file << "\n";
 
 
-*/
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        for (int i = 0; i < mPoints.size(); ++i) {
+            shapes[i].setPosition(mPoints[i]->gPos().gX()+400, mPoints[i]->gPos().gY()+400);
+        }
+
+        for (int i = 0; i < shapes.size(); ++i) {
+            window.draw(shapes[i]);
+        }
+
+
+        window.display();
+        window.clear();
+
+
         n++;
-        time+=dt;
-    }
+        time += dt;
 
 
-}
-
-void System::write_to_file() {
-    std::ofstream file("../system.txt");
-    double time = 0.0;
-    for(int i =0; i<this->data[0].size(); i++){
-        file<<time<<"\t"<<this->data[0].at(i).gX() <<"\t"<<this->data[0].at(i).gY()<<"\n";
-        time+=this->dt;
-    }
-
-    file.close();
-}
-
-System::~System() {
-    for (int i = 0; i < this->mPoints.size(); ++i) {
-        delete mPoints[i];
     }
 }
+
+    void System::write_to_file() {
+        std::ofstream file("../system.txt");
+        double time = 0.0;
+        for (int i = 0; i < this->data[0].size(); i++) {
+            file << time << "\t" << this->data[0].at(i).gX() << "\t" << this->data[0].at(i).gY() << "\n";
+            time += this->dt;
+        }
+
+        file.close();
+    }
+
+    System::~System()
+    {
+        for (int i = 0; i < this->mPoints.size(); ++i) {
+            delete mPoints[i];
+        }
+
+    }
+
 
 /*std::array<lmh::Vector2f, 2> System::simulate_euler(const double &max) {
     lmh::Vector2f dv;

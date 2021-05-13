@@ -26,6 +26,13 @@ public:
     void sPos(const lmh::Vector2f& pos );
     void sVel(const lmh::Vector2f& vel);
     void sForce(const lmh::Vector2f& force);
+    void sDamp(const double damp){
+        this->damping = damp;
+    }
+    double gDamp() const {
+        return this->damping;
+    }
+
 
     lmh::Vector2f gPos() const;
     lmh::Vector2f gVel() const;
@@ -46,6 +53,7 @@ private:
     lmh::Vector2f velocity;
     lmh::Vector2f force;
     double mass{};
+    double damping;
 
     lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
 
