@@ -38,7 +38,8 @@ private:
     //time increment
     double dt = 0.01;
 
-    //the RK4 method that gives f(t+dt)
+    //the RK4 method that gives f(t+dt)§
+
     //std::array<lmh::Vector2f, 2> comp_next(const int&);
 
     //temporary structure to store data (position and velocity)

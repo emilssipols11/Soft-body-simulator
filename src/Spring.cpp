@@ -44,3 +44,14 @@ MPoint* Spring::gB() const{
     return this->B;
 }
 
+void Spring::draw(sf::RenderWindow *w) {
+
+    if(!is_drawed){
+        lines[0].position = sf::Vector2f(this->A->gPos().gX(), this->A->gPos().gY());
+        lines[1].position = sf::Vector2f(this->B->gPos().gX(), this->B->gPos().gY());
+        w->draw(lines);
+        this->is_drawed = true;
+    }
+
+}
+

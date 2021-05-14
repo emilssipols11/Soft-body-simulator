@@ -18,6 +18,8 @@ public:
     Spring(){
         this->A = nullptr;
         this->B = nullptr;
+        lines.resize(2);
+        lines.setPrimitiveType(sf::LineStrip);
     }
 
     //get the distance between the two mass points
@@ -53,6 +55,11 @@ private:
     //every spring have two mass points
     MPoint* A;
     MPoint* B;
+
+    void draw(sf::RenderWindow *w);
+
+    bool is_drawed = false;
+    sf::VertexArray lines;
 };
 
 #endif //SOFT_BODY_SIMULATOR_SPRING_H

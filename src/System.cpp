@@ -14,9 +14,9 @@
 
 
 System::System()  {
-    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0, 120.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint *mp2 = new MPoint(lmh::Vector2f(0.0, 0.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint *mp3 = new MPoint(lmh::Vector2f(103.9230484541326376116, 60.0), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0 + 400, 120.0 + 400), lmh::Vector2f(500.0 ,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp2 = new MPoint(lmh::Vector2f(0.0 + 400, 70 + 400), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp3 = new MPoint(lmh::Vector2f(103.9230484541326376116 + 400, 60.0 + 400), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
 
     Spring spr1(100.0, 3, 100.0);
     Spring spr2(100.0, 3, 100.0);
@@ -42,9 +42,9 @@ System::System()  {
     mPoints.push_back(mp2);
     mPoints.push_back(mp3);
 
-    mp1->sDamp(0.5);
-    mp2->sDamp(0.5);
-    mp3->sDamp(4);
+    mp1->sDamp(0.1);
+    mp2->sDamp(0.1);
+    mp3->sDamp(0.1);
 }
 
 /*
@@ -83,14 +83,7 @@ System::System()  {
 void System::simulate(const double& max_time) {
     // set the time to zero
 
-    std::ofstream file("../threemp.txt");
-
     double time = 0.0;
-
-    // set the initial condition (the position of the Mpoints of the dipole)
-    // this->data.at(0).push_back(dip.gA().gPos());
-    // this->data.at(1).push_back(dip.gA().gVel());
-
 
     int n = 0;
 
@@ -116,8 +109,6 @@ void System::simulate(const double& max_time) {
     while (time < max_time && window.isOpen()) {
 
         // for loop that iterates on mPoints
-
-
         for (int i = 0; i < mPoints.size(); ++i) {
 
             temp = mPoints[i]->comp_next(i);
@@ -126,8 +117,6 @@ void System::simulate(const double& max_time) {
             temp_mpoints[i].sVel(temp[1]);
 
             // now update the position for the current masspoint
-            //mPoints[i]->sPos(temp[0]);
-            //mPoints[i]->sVel(temp[1]);
 
         }
 
@@ -136,11 +125,6 @@ void System::simulate(const double& max_time) {
             this->mPoints[i]->sVel(temp_mpoints[i].gVel());
         }
 
-
-        for (int i = 0; i < this->mPoints.size(); ++i) {
-            file << this->mPoints[i]->gPos().gX() << "\t" << this->mPoints[i]->gPos().gY() << "\t";
-        }
-        file << "\n";
 
 
         sf::Event event;
@@ -154,8 +138,9 @@ void System::simulate(const double& max_time) {
             shapes[i].setPosition(mPoints[i]->gPos().gX()+400, mPoints[i]->gPos().gY()+400);
         }
 
-        for (int i = 0; i < shapes.size(); ++i) {
-            window.draw(shapes[i]);
+        for (int i = 0; i < mPoints.size(); ++i) {
+            mPoints[i]->sDrawable(10, 7);
+            mPoints[i]->draw(&window);
         }
 
 
