@@ -37,7 +37,7 @@ Window::Window(const unsigned int &h, const unsigned int &w) {
 }
 
 bool Window::window_closed() {
-    glfwWindowShouldClose(*win);
+    return glfwWindowShouldClose(*win);
 }
 
 void Window::terminate_window() {

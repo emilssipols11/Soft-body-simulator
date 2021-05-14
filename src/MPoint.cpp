@@ -154,7 +154,8 @@ lmh::Vector2f MPoint::diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2
     );*/
 
     return lmh::Vector2f(
-            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK()
+            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() -
+                    velocity*damping + lmh::Vector2f(0, 1000)
     );
 
 }
