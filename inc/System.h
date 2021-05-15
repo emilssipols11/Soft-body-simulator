@@ -22,6 +22,8 @@ public:
     //to a file "system.txt"
     void write_to_file();
 
+    double total_kinetic();
+
     //DEPRECATED
     //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
 
@@ -34,6 +36,7 @@ private:
 
     // the mass points
     std::vector<MPoint*> mPoints;
+    std::vector<Spring> springs;
 
     //time increment
     double dt = 0.01;

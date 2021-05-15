@@ -20,6 +20,7 @@ public:
         this->B = nullptr;
         lines.resize(2);
         lines.setPrimitiveType(sf::LineStrip);
+        this->is_drawed = false;
     }
 
     //get the distance between the two mass points
@@ -39,6 +40,9 @@ public:
 
     MPoint* gA() const;
     MPoint* gB() const;
+    void draw(sf::RenderWindow *w);
+
+    double gEnergy() const;
 
 private:
 
@@ -56,9 +60,8 @@ private:
     MPoint* A;
     MPoint* B;
 
-    void draw(sf::RenderWindow *w);
 
-    bool is_drawed = false;
+    bool is_drawed ;
     sf::VertexArray lines;
 };
 

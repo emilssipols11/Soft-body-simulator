@@ -8,6 +8,7 @@
 
 MPoint::MPoint(lmh::Vector2f pos, lmh::Vector2f vel, lmh::Vector2f force, const double &m)
     : position(pos), velocity(vel), force(force), mass(m){
+    this->circle.setOrigin(circle.getRadius()/2.0, circle.getRadius()/2.0);
 }
 
 void MPoint::sPos(const lmh::Vector2f &pos) {
@@ -154,15 +155,15 @@ lmh::Vector2f MPoint::diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2
     );*/
 
     return lmh::Vector2f(
-            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() -
-                    velocity*damping
+            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK()
+
     );
 
 }
 
 void MPoint::draw(sf::RenderWindow *w) {
 
-    circle.setPosition(this->position.gX(), this->position.gY());
+    circle.setPosition(this->position.gX() - circle.getRadius()/2.0, this->position.gY() - circle.getRadius()/2.0);
 
     w->draw(this->circle);
 }
@@ -170,6 +171,7 @@ void MPoint::draw(sf::RenderWindow *w) {
 void MPoint::sDrawable(float radius, int point_count) {
     this->circle.setRadius(radius);
     this->circle.setPointCount(point_count);
+    this->circle.setOrigin(circle.getRadius()/2.0, circle.getRadius()/2.0);
 }
 
 

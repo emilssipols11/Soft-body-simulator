@@ -14,13 +14,16 @@
 
 
 System::System()  {
-    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0 + 400, 120.0 + 400), lmh::Vector2f(500.0 ,0.0), lmh::Vector2f(0.0,0.0), 10);
+    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0 + 400, 120.0 + 400), lmh::Vector2f(0.0 ,0.0), lmh::Vector2f(0.0,0.0), 10);
     MPoint *mp2 = new MPoint(lmh::Vector2f(0.0 + 400, 70 + 400), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
     MPoint *mp3 = new MPoint(lmh::Vector2f(103.9230484541326376116 + 400, 60.0 + 400), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
+    //MPoint* mp4 = new MPoint(lmh::Vector2f(0.0+550, 440.0), lmh::Vector2f(0.0, 0.0), lmh::Vector2f(0.0, 0.0), 10);
 
     Spring spr1(100.0, 3, 100.0);
     Spring spr2(100.0, 3, 100.0);
     Spring spr3 (100.0, 3, 100.0);
+    //Spring spr4(500.0, 3, 50.0);
+    //Spring spr5(100.0, 3, 100.0);
 
 
     spr1.sA(mp1);
@@ -29,22 +32,40 @@ System::System()  {
     spr2.sB(mp3);
     spr3.sA(mp3);
     spr3.sB(mp1);
+    //spr4.sA(mp4);
+    //spr4.sB(mp1);
+    //spr5.sA(mp4);
+    //spr5.sB(mp3);
 
     mp1->attach_spring(spr1);
     mp1->attach_spring(spr3);
+    //mp1->attach_spring(spr4);
     mp2->attach_spring(spr1);
     mp2->attach_spring(spr2);
     mp3->attach_spring(spr3);
     mp3->attach_spring(spr2);
+    //mp3->attach_spring(spr5);
+    //mp4->attach_spring(spr4);
+    //mp4->attach_spring(spr5);
+
 
 
     mPoints.push_back(mp1);
     mPoints.push_back(mp2);
     mPoints.push_back(mp3);
+    //mPoints.push_back(mp4);
 
-    mp1->sDamp(0.1);
-    mp2->sDamp(0.1);
-    mp3->sDamp(0.1);
+
+    springs.push_back(spr1);
+    springs.push_back(spr2);
+    springs.push_back(spr3);
+    //springs.push_back(spr4);
+    //springs.push_back(spr5);
+
+    mp1->sDamp(0.0);
+    mp2->sDamp(0.0);
+    mp3->sDamp(0.0);
+    //mp4->sDamp(0);
 }
 
 /*
@@ -83,6 +104,9 @@ System::System()  {
 void System::simulate(const double& max_time) {
     // set the time to zero
 
+    std::ofstream file("../../system2.txt");
+
+
     double time = 0.0;
 
     int n = 0;
@@ -91,7 +115,9 @@ void System::simulate(const double& max_time) {
     std::array<lmh::Vector2f, 2> temp;
     std::vector<MPoint> temp_mpoints = {MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
                                         MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
-                                        MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0)};
+                                        MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
+                                        //MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0)
+    };
 
 
 
@@ -100,11 +126,14 @@ void System::simulate(const double& max_time) {
     std::vector<sf::CircleShape> shapes {
         sf::CircleShape(7, 6),
         sf::CircleShape(7, 6),
-        sf::CircleShape(7, 6)
+        sf::CircleShape(7, 6),
+        //sf::CircleShape(7,6)
     };
 
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(120);
 
+    sf::CircleShape circ(20, 12);
+    circ.setPosition(0-circ.getRadius()/2.0 ,0 - circ.getRadius()/2.0);
 
     while (time < max_time && window.isOpen()) {
 
@@ -141,8 +170,12 @@ void System::simulate(const double& max_time) {
         for (int i = 0; i < mPoints.size(); ++i) {
             mPoints[i]->sDrawable(10, 7);
             mPoints[i]->draw(&window);
+            //springs[i].draw(&window);
         }
+        file<<time<<"\t"<<this->total_kinetic()<<"\n";
+        //springs[4].draw(&window);
 
+        window.draw(circ);
 
         window.display();
         window.clear();
@@ -151,8 +184,9 @@ void System::simulate(const double& max_time) {
         n++;
         time += dt;
 
-
     }
+
+    file.close();
 }
 
     void System::write_to_file() {
@@ -173,6 +207,17 @@ void System::simulate(const double& max_time) {
         }
 
     }
+
+    double System::total_kinetic() {
+    double E_cin = 0.0;
+        for (int i = 0; i < mPoints.size(); ++i) {
+            E_cin += (mPoints[i]->gVel()).norm()*(mPoints[i]->gVel()).norm() * 0.5;
+        }
+        for (int i = 0; i < springs.size(); ++i) {
+            E_cin+=springs[i].gEnergy();
+        }
+        return E_cin;
+}
 
 
 /*std::array<lmh::Vector2f, 2> System::simulate_euler(const double &max) {
