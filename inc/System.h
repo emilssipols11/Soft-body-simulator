@@ -17,6 +17,7 @@ public:
     //function that simulates the motion of a dipole till max_time
     //and stores it in the std::array<std::vector<lmh::Vector2f>, 2> data;
     void simulate(const double&max_time);
+    void simulatev2(const double &max_time);
 
     //reads writes the     std::array<std::vector<lmh::Vector2f>, 2> data;
     //to a file "system.txt"
@@ -31,8 +32,9 @@ public:
     ~System();
 
 private:
-    // the dipole
-    // Dipole dip;
+
+    //compute the geometric centre
+    lmh::Vector2f geom_centre();
 
     // the mass points
     std::vector<MPoint*> mPoints;

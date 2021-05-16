@@ -28,7 +28,7 @@ int main() {
     Dipole dip(points[1], points[0], spr );
 
     System sys;
-    sys.simulate(1000.0);
+    sys.simulatev2(1000.0);
 
 
 

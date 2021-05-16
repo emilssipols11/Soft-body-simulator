@@ -50,9 +50,9 @@ lmh::Vector2f MPoint::gForce(const lmh::Vector2f& dx, const lmh::Vector2f& dv)  
     this->force = (lmh::Vector2f(0.0, 0.0));
     for (int i = 0; i < attached.size(); ++i) {
         if(attached[i].gB() != this) {
-            this->force+=diffeq(this->gPos()+dx, attached[i].gB()->gPos()-dx, this->gVel()+dv, attached[i].gB()->gVel()-dv, i);
+            this->force+=diffeq(this->gPos()+dx, attached[i].gB()->gPos() , this->gVel()+dv, attached[i].gB()->gVel() , i);
         } else {
-            this->force+=diffeq(this->gPos()+dx, attached[i].gA()->gPos()-dx, this->gVel()+dv, attached[i].gA()->gVel()-dv, i);
+            this->force+=diffeq(this->gPos()+dx, attached[i].gA()->gPos() , this->gVel()+dv, attached[i].gA()->gVel() , i);
 
         }
     }
@@ -85,6 +85,8 @@ std::array<lmh::Vector2f, 2> MPoint::comp_next(const int& i) {
     lmh::Vector2f dv = (dv1 + dv2*2.0+ dv3*2.0 + dv4)*(1.0/6.0);
     lmh::Vector2f dx = (dx1 + dx2*2.0 + dx3*2.0 + dx4)*(1.0/6.0);
 
+    this->position = this->position + dx;
+    this->velocity = this->velocity + dv;
 
     return std::array<lmh::Vector2f, 2> { this->gPos() + dx , this->gVel() + dv};
 }
@@ -128,11 +130,30 @@ std::array<lmh::Vector2f, 2> MPoint::comp_nextv2(const int &) {
             lmh::Vector2f dx = (dx1 + dx2*2.0 + dx3*2.0 + dx4)*(1.0/6.0);
             this->force+=diffeq(this->gPos()+dx, attached[i].gB()->gPos(), this->gVel()+dv, attached[i].gB()->gVel(), i);
         } else {
+            dx1 = this->gVel()*h;
+
+            dv1 = diffeq(this->gPos(), attached[i].gB()->gPos(), this->gVel(), attached[i].gB()->gPos(), i)*h;
+            //dv1 = (this->gForce())*h;
+
+            dx2 = (this->gVel() + dv1*0.5)*h;
+
+            dv2 = diffeq(this->gPos() + dx1*0.5, attached[i].gB()->gPos(), this->gVel() + dv1*0.5, attached[i].gB()->gPos(), i)*h;
+            //dv2 = this->gForce(dx1*0.5, dv1*0.5)*h;
+
+            dx3 = (this->gVel() + dv2*0.5)*h;
+            dv3 = this->gForce(dx2*0.5, dv1*0.5)*h;
+
+            dx4 = (this->gVel() + dv3)*h;
+            dv4 = this->gForce( dx3,  dv1)*h;
+
+            lmh::Vector2f dv = (dv1 + dv2*2.0+ dv3*2.0 + dv4)*(1.0/6.0);
+            lmh::Vector2f dx = (dx1 + dx2*2.0 + dx3*2.0 + dx4)*(1.0/6.0);
             this->force+=diffeq(this->gPos()+dx, attached[i].gA()->gPos(), this->gVel()+dv, attached[i].gA()->gVel(), i);
 
         }
     }
 
+    return std::array<lmh::Vector2f, 2>{this->gPos() + dx, this->gVel() + dv};
 
 }
 

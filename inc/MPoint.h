@@ -47,9 +47,11 @@ public:
     std::array<lmh::Vector2f, 2> comp_next(const int&);
     std::array<lmh::Vector2f, 2> comp_nextv2(const int&);
 
+
     //we set the specs for the circle that will be drawed
     void sDrawable(float radius,int point_count);
     void draw(sf::RenderWindow* w) ;
+    lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
 
 
 private:
@@ -62,7 +64,6 @@ private:
     double damping;
     sf::CircleShape circle;
 
-    lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
 
 
 };
