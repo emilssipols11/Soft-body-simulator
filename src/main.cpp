@@ -6,14 +6,7 @@
 #include <fstream>
 #include "Window.h"
 #include <cmath>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include "VertexArray.h"
-#include "Shader.h"
-#include "IndexBuffer.h"
 #include <SFML/Graphics.hpp>
-
-//void simulate();
 
 static void cosine();
 
@@ -30,58 +23,6 @@ int main() {
     System sys;
     sys.simulatev2(1000.0);
 
-
-
-
-    /*float positions[]={
-            -0.5f, -0.5f, 0.0f,
-            -0.5f, 0.5f, 0.0f,
-            0.5f, 0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f
-            //0.5f, 0.5f, 0.0f,
-            //0.5f, -0.5f, 0.0f,
-            //-0.5f, 0.5f, 0.0f
-    };
-
-    unsigned int indices[]{
-        0,1,2,
-        2,3,0
-    };
-
-    Window w(640,480);
-
-    Shader sh("/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/vshader.glsl" ,"/home/leo/Documents/projects/cpp_projects/Soft-body-simulator/src/shaders/fshader.glsl");
-    sh.compile_and_link();
-    sh.use();
-
-    VertexArray va;
-    va.bind();
-
-    VertexBuffer vb(positions, sizeof(positions));
-    vb.bind();
-
-    IndexBuffer ib(indices, sizeof(indices));
-
-    ib.bind();
-
-    va.add_buffer(vb);
-
-
-    while (!w.window_closed()){
-
-
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        //glDrawArrays(GL_LINES, 0,2);
-
-        w.swap_buffers();
-        w.poll_events();
-    }
-
-    w.terminate_window();
-
-    return 0;*/
 }
 
 void cosine(){

@@ -1,7 +1,3 @@
-//
-// Created by leo on 4/28/21.
-//
-
 #include "System.h"
 #include <fstream>
 #include "MPoint.h"
@@ -68,38 +64,6 @@ System::System()  {
     mp4->sDamp(0.0);
 }
 
-/*
-//the argument must be the mpoint
-//std::array<lmh::Vector2f, 2> System::comp_next(const int& i) {
-//
-//    lmh::Vector2f dx1, dx2, dx3, dx4, dv1, dv2, dv3, dv4;
-//    double h = 0.01;
-//
-//
-//    //DX1 = mPoints[i].gForce
-//
-//    dx1 = this->mPoints[i]->gPos()*h;
-//
-//    //dv1 = mpoint.getForce()*(1/M)
-//    dv1 = (this->mPoints[i]->gForce())(prev_pos, prev_vel)*h;
-//
-//    dx2 = (prev_vel + dv1*0.5)*h;
-//    dv2 = (this->dip.diffeq)(prev_pos + dx1*0.5, prev_vel + dv1*0.5)*h;
-//
-//    dx3 = (prev_vel + dv2*0.5)*h;
-//    dv3 = (this->dip.diffeq)(prev_pos + dx2*0.5, prev_vel + dv1*0.5)*h;
-//
-//    dx4 = (prev_vel + dv3)*h;
-//    dv4 = (this->dip.diffeq)(prev_pos + dx3, prev_vel + dv1)*h;
-//
-//    lmh::Vector2f dv = (dv1 + dv2*2.0+ dv3*2.0 + dv4)*(1.0/6.0);
-//    lmh::Vector2f dx = (dx1 + dx2*2.0 + dx3*2.0 + dx4)*(1.0/6.0);
-//
-//
-//    return std::array<lmh::Vector2f, 2> { prev_pos + dx , prev_vel + dv};
-//}*/
-
-
 
 void System::simulate(const double& max_time) {
     // set the time to zero
@@ -116,7 +80,6 @@ void System::simulate(const double& max_time) {
     std::vector<MPoint> temp_mpoints = {MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
                                         MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
                                         MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0),
-                                        //MPoint(lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), lmh::Vector2f(0, 0), 0)
     };
 
 
@@ -240,7 +203,7 @@ void System::simulatev2(const double &max_time) {
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
 
-    window.setFramerateLimit(140);
+    window.setFramerateLimit(30);
     std::ofstream file("../../system.txt");
 
     sf::CircleShape centre(20,10);
@@ -248,13 +211,10 @@ void System::simulatev2(const double &max_time) {
 
     while (window.isOpen()){
 
-
         for (int i = 0; i < mPoints.size(); ++i) {
             initial_pos_vel[i][0] = mPoints[i]->gPos();
             initial_pos_vel[i][1] = mPoints[i]->gVel();
         }
-
-
         for (int i = 0; i < mPoints.size(); ++i) {
             koefsx[i][0] = mPoints[i]->gVel()*dt;
             koefsv[i][0] = mPoints[i]->gForce()*dt;
@@ -275,7 +235,6 @@ void System::simulatev2(const double &max_time) {
             mPoints[i]->sPos(initial_pos_vel[i][0] + koefsx[i][1]*0.5);
             mPoints[i]->sVel(initial_pos_vel[i][1] + koefsv[i][1]*0.5);
         }
-
         for (int i = 0; i < mPoints.size(); ++i) {
             koefsx[i][2] = mPoints[i]->gVel()*dt;
             koefsv[i][2] = mPoints[i]->gForce()*dt;
@@ -286,7 +245,6 @@ void System::simulatev2(const double &max_time) {
             mPoints[i]->sPos(initial_pos_vel[i][0] + koefsx[i][2]);
             mPoints[i]->sVel(initial_pos_vel[i][1] + koefsv[i][2]);
         }
-
         for (int i = 0; i < mPoints.size(); ++i) {
             koefsx[i][3] = mPoints[i]->gVel()*dt;
             koefsv[i][3] = mPoints[i]->gForce()*dt;
@@ -297,7 +255,6 @@ void System::simulatev2(const double &max_time) {
             mPoints[i]->sPos(initial_pos_vel[i][0] + koefsx[i][3]);
             mPoints[i]->sVel(initial_pos_vel[i][1] + koefsv[i][3]);
         }
-
         for (int i = 0; i < mPoints.size(); ++i) {
             koefsx[i][4] = (koefsx[i][0] + koefsx[i][1]*2.0 + koefsx[i][2]*2.0 + koefsx[i][3])*(1.0/6.0);
             koefsv[i][4] = (koefsv[i][0] + koefsv[i][1]*2.0 + koefsv[i][2]*2.0 + koefsv[i][3])*(1.0/6.0);
@@ -308,7 +265,6 @@ void System::simulatev2(const double &max_time) {
             mPoints[i]->sVel(initial_pos_vel[i][1] + koefsv[i][4]);
 
         }
-
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -323,8 +279,10 @@ void System::simulatev2(const double &max_time) {
             //springs[i].draw(&window);
         }
 
+        collisionObjects();
+
         centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
-        std::cout<<geom_centre();
+        // std::cout<<geom_centre();
         window.draw(centre);
 
 
@@ -338,6 +296,19 @@ void System::simulatev2(const double &max_time) {
 
 }
 
+void System::collisionObjects() {
+    lmh::Vector2f currentPosition;
+    for (int i = 0; i < mPoints.size(); ++i) {
+        currentPosition = mPoints[i]->gPos();
+        if (currentPosition.gX()-mPoints[i]->gR()<0 || currentPosition.gX()+mPoints[i]->gR()>600) {
+            mPoints[i]->sVel(lmh::Vector2f(-mPoints[i]->gVel().gX(), mPoints[i]->gVel().gY()));
+        }
+        if (currentPosition.gY()-mPoints[i]->gR()<0 || currentPosition.gY()+mPoints[i]->gR()>600) {
+            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), -mPoints[i]->gVel().gY()));
+        }
+    }
+}
+
 lmh::Vector2f System::geom_centre() {
     lmh::Vector2f to_ret(0.0, 0.0);
     for (int i = 0; i < mPoints.size(); ++i) {
@@ -346,44 +317,4 @@ lmh::Vector2f System::geom_centre() {
     }
     return to_ret*(1.0/(mPoints.size()));
 }
-
-
-/*std::array<lmh::Vector2f, 2> System::simulate_euler(const double &max) {
-    lmh::Vector2f dv;
-    lmh::Vector2f dx;
-
-    double time = 0;
-
-    this->data.at(0).push_back(this->dip.gA().gPos());
-    this->data.at(1).push_back(this->dip.gA().gVel());
-
-    int n = 0;
-
-    while (time < max){
-        //compute velocity
-        dv = dip.diffeq(data.at(0)[n], data.at(1)[n])*(this->dt);
-        this->data.at(1).push_back(dv + this->data.at(1)[n]);
-
-        dx = this->data.at(1)[n]*(this->dt);
-        this->data.at(0).push_back(dx + this->data.at(0)[n]);
-
-        this->dip.sA(MPoint(this->data.at(0)[n+1], this->data.at(1)[n+1], lmh::Vector2f(0.0, 0.0), dip.gA().gMass()));
-
-        time+=dt;
-        n++;
-        //compute position
-    }
-
-    std::ofstream file("../rk4.txt");
-
-    double time2 = 0;
-
-    for (int i = 0; i < this->data.at(0).size(); ++i) {
-        file<<time2<<"\t"<<this->data.at(0)[i].gY()<<"\n";
-        time2+=dt;
-    }
-
-
-}
-*/
 

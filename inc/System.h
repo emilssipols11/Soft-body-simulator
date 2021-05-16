@@ -36,6 +36,9 @@ private:
     //compute the geometric centre
     lmh::Vector2f geom_centre();
 
+    // colision with surrounding objects
+    void collisionObjects();
+
     // the mass points
     std::vector<MPoint*> mPoints;
     std::vector<Spring> springs;

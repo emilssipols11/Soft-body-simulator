@@ -48,12 +48,9 @@ MPoint* Spring::gB() const{
 }
 
 void Spring::draw(sf::RenderWindow *w) {
-
         lines[0].position = sf::Vector2f(this->A->gPos().gX(), this->A->gPos().gY());
         lines[1].position = sf::Vector2f(this->B->gPos().gX(), this->B->gPos().gY());
         w->draw(lines);
-
-
 }
 
 double Spring::gEnergy() const {

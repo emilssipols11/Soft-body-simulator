@@ -52,7 +52,7 @@ public:
     void sDrawable(float radius,int point_count);
     void draw(sf::RenderWindow* w) ;
     lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
-
+    inline double gR(){return this->circle.getRadius(); };
 
 private:
     //vector of attached
