@@ -8,6 +8,7 @@
 #include "Vector2f.h"
 #include <vector>
 #include <array>
+#include <SFML/Graphics.hpp>
 
 class Spring;
 
@@ -34,6 +35,7 @@ public:
     }
 
 
+
     lmh::Vector2f gPos() const;
     lmh::Vector2f gVel() const;
     lmh::Vector2f gForce();
@@ -46,6 +48,12 @@ public:
     std::array<lmh::Vector2f, 2> comp_nextv2(const int&);
 
 
+    //we set the specs for the circle that will be drawed
+    void sDrawable(float radius,int point_count);
+    void draw(sf::RenderWindow* w) ;
+    lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
+    inline double gR(){return this->circle.getRadius(); };
+
 private:
     //vector of attached
     std::vector<Spring> attached;
@@ -54,8 +62,9 @@ private:
     lmh::Vector2f force;
     double mass{};
     double damping;
+    sf::CircleShape circle;
 
-    lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
+
 
 };
 

@@ -74,7 +74,8 @@ double lmh::Vector2f::dot(const Vector2f& vec) const {
 }
 
 lmh::Vector2f lmh::Vector2f::normalize(const Vector2f &vec) const {
-    return Vector2f((vec)*(1/(this->norm())));
+    lmh::Vector2f ret = (vec)*(1/(this->norm()));
+    return ret;
 }
 /**
  *

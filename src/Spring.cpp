@@ -6,6 +6,9 @@
 
 Spring::Spring(const double &k, const double& damping,const double &l0) : k(k), damping(damping), l0(l0) {
 
+    lines.resize(2);
+    lines.setPrimitiveType(sf::LineStrip);
+    this->is_drawed = false;
 
 }
 
@@ -42,5 +45,16 @@ MPoint* Spring::gA() const {
 
 MPoint* Spring::gB() const{
     return this->B;
+}
+
+void Spring::draw(sf::RenderWindow *w) {
+        lines[0].position = sf::Vector2f(this->A->gPos().gX(), this->A->gPos().gY());
+        lines[1].position = sf::Vector2f(this->B->gPos().gX(), this->B->gPos().gY());
+        w->draw(lines);
+}
+
+double Spring::gEnergy() const {
+    return  ((this->A->gPos() - this->B->gPos()).norm() - this->l0) *
+            ((this->A->gPos() - this->B->gPos()).norm() - this->l0)   * this->k * 0.5;
 }
 

@@ -17,10 +17,13 @@ public:
     //function that simulates the motion of a dipole till max_time
     //and stores it in the std::array<std::vector<lmh::Vector2f>, 2> data;
     void simulate(const double&max_time);
+    void simulatev2(const double &max_time);
 
     //reads writes the     std::array<std::vector<lmh::Vector2f>, 2> data;
     //to a file "system.txt"
     void write_to_file();
+
+    double total_kinetic();
 
     //DEPRECATED
     //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
@@ -29,16 +32,22 @@ public:
     ~System();
 
 private:
-    // the dipole
-    // Dipole dip;
+
+    //compute the geometric centre
+    lmh::Vector2f geom_centre();
+
+    // colision with surrounding objects
+    void collisionObjects();
 
     // the mass points
     std::vector<MPoint*> mPoints;
+    std::vector<Spring> springs;
 
     //time increment
     double dt = 0.01;
 
-    //the RK4 method that gives f(t+dt)
+    //the RK4 method that gives f(t+dt)§
+
     //std::array<lmh::Vector2f, 2> comp_next(const int&);
 
     //temporary structure to store data (position and velocity)
