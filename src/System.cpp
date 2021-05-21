@@ -84,7 +84,7 @@ void System::simulate(const double& max_time) {
 
 
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
+    sf::RenderWindow window(sf::VideoMode(1080, 1920), "SFML is superior!");
 
     std::vector<sf::CircleShape> shapes {
         sf::CircleShape(7, 6),
