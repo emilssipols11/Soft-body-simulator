@@ -7,6 +7,7 @@
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include <SFML/Graphics.hpp>
+#include "Walls.h"
 
 
 System::System()  {
@@ -62,6 +63,10 @@ System::System()  {
     mp2->sDamp(0.0);
     mp3->sDamp(0.0);
     mp4->sDamp(0.0);
+
+
+    //initialize the walls
+
 }
 
 
@@ -97,6 +102,7 @@ void System::simulate(const double& max_time) {
 
     sf::CircleShape circ(20, 12);
     circ.setPosition(0-circ.getRadius()/2.0 ,0 - circ.getRadius()/2.0);
+
 
     while (time < max_time && window.isOpen()) {
 
@@ -135,10 +141,12 @@ void System::simulate(const double& max_time) {
             mPoints[i]->draw(&window);
             //springs[i].draw(&window);
         }
+
         file<<time<<"\t"<<this->total_kinetic()<<"\n";
         //springs[4].draw(&window);
 
         //window.draw(circ);
+
 
         window.display();
         window.clear();
@@ -183,6 +191,8 @@ void System::simulate(const double& max_time) {
 }
 
 void System::simulatev2(const double &max_time) {
+
+
     std::vector<std::array<lmh::Vector2f, 5>> koefsx;
     koefsx.resize(mPoints.size());
 
@@ -208,6 +218,7 @@ void System::simulatev2(const double &max_time) {
 
     sf::CircleShape centre(20,10);
     centre.setFillColor(sf::Color::Cyan);
+    Walls walls(&window);
 
     while (window.isOpen()){
 
@@ -276,10 +287,11 @@ void System::simulatev2(const double &max_time) {
         for (int i = 0; i < mPoints.size(); ++i) {
             mPoints[i]->sDrawable(10, 7);
             mPoints[i]->draw(&window);
-            //springs[i].draw(&window);
+            springs[i].draw(&window);
         }
 
         collisionObjects();
+        walls.draw_walls();
 
         centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
         // std::cout<<geom_centre();

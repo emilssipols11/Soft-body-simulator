@@ -11,13 +11,17 @@
 class Walls{
 public:
     Walls(sf::RenderWindow *w);
+    Walls(sf::RenderWindow *w, const int offset);
     Walls(const std::array<sf::Vector2f, 4>& v);
+
+    void draw_walls();
 
 
 private:
 
     //contains all the vertices
     std::array<sf::Vector2f, 4> vertices;
+    sf::VertexArray wall_lines;
     sf::RenderWindow *w;
 
 };
