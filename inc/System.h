@@ -9,24 +9,17 @@
 class System{
 public:
     // Constructor setting all the variables of the class
-    // dip - the Dipole
+    // we initialize the system
     System();
-    //we initialize the system
 
+    //System cannot be copied
+    System(System const& ) = delete;
 
     //function that simulates the motion of a dipole till max_time
     //and stores it in the std::array<std::vector<lmh::Vector2f>, 2> data;
-    void simulate(const double&max_time);
     void simulatev2(const double &max_time);
 
-    //reads writes the     std::array<std::vector<lmh::Vector2f>, 2> data;
-    //to a file "system.txt"
-    void write_to_file();
-
     double total_kinetic();
-
-    //DEPRECATED
-    //std::array<lmh::Vector2f, 2> simulate_euler(const double& max_time);
 
     //delete the with "new" allocated MPoints* in the std::vector
     ~System();
@@ -39,22 +32,22 @@ private:
     // colision with surrounding objects
     void collisionObjects();
 
-    // the mass points
-    std::vector<MPoint*> mPoints;
-    std::vector<Spring> springs;
+    //method that computes the position, the velocity
+    //using the RK4 method
+    void compute_RK4(std::vector<std::array<lmh::Vector2f, 5>>&, std::vector<std::array<lmh::Vector2f, 5>> &,
+    std::vector<std::array<lmh::Vector2f, 2>> & );
+
+    /*
+     * DATA
+     */
 
     //time increment
     double dt = 0.01;
 
-    //the RK4 method that gives f(t+dt)§
-
-    //std::array<lmh::Vector2f, 2> comp_next(const int&);
-
-    //temporary structure to store data (position and velocity)
-    std::array<std::vector<lmh::Vector2f>, 2> data;
-
-
-
+    // the mass points
+    // and the springs
+    std::vector<MPoint*> mPoints;
+    std::vector<Spring> springs;
 };
 
 
