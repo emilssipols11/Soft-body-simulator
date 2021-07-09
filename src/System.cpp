@@ -1,13 +1,8 @@
 #include "System.h"
 #include <fstream>
 #include "MPoint.h"
-#include "Window.h"
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
 #include <SFML/Graphics.hpp>
-#include "Walls.h"
+#include <algorithm>
 
 //initialize the system
 System::System()  {
@@ -102,6 +97,9 @@ void System::simulatev2(const double &max_time) {
     sf::CircleShape centre(20,10);
     centre.setFillColor(sf::Color::Cyan);
 
+    double offset = 20.0;
+    Walls walls(window);
+
     while (window.isOpen()){
 
         compute_RK4(koefsx, koefsv, initial_pos_vel);
@@ -119,7 +117,9 @@ void System::simulatev2(const double &max_time) {
             springs[i].draw(&window);
         }
 
-        collisionObjects();
+        collision(walls);
+
+        walls.draw_walls(offset);
 
         centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
 
@@ -135,18 +135,7 @@ void System::simulatev2(const double &max_time) {
 
 }
 
-void System::collisionObjects() {
-    lmh::Vector2f currentPosition;
-    for (int i = 0; i < mPoints.size(); ++i) {
-        currentPosition = mPoints[i]->gPos();
-        if (currentPosition.gX()-mPoints[i]->gR()<0 || currentPosition.gX()+mPoints[i]->gR()>600) {
-            mPoints[i]->sVel(lmh::Vector2f(-mPoints[i]->gVel().gX(), mPoints[i]->gVel().gY()));
-        }
-        if (currentPosition.gY()-mPoints[i]->gR()<0 || currentPosition.gY()+mPoints[i]->gR()>600) {
-            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), -mPoints[i]->gVel().gY()));
-        }
-    }
-}
+
 
 lmh::Vector2f System::geom_centre() {
     lmh::Vector2f to_ret(0.0, 0.0);
@@ -211,5 +200,42 @@ System::~System()
     for (int i = 0; i < this->mPoints.size(); ++i) {
         delete mPoints[i];
     }
+
+}
+
+void System::collision(Walls &walls) {
+    lmh::Vector2f currentPosition;
+    for (int i = 0; i < mPoints.size(); ++i) {
+        currentPosition = mPoints[i]->gPos();
+        if (currentPosition.gX()-mPoints[i]->gR()< walls.gXl() || currentPosition.gX()+mPoints[i]->gR()>walls.gXr()) {
+            mPoints[i]->sVel(lmh::Vector2f(-mPoints[i]->gVel().gX(), mPoints[i]->gVel().gY()));
+        }
+        if (currentPosition.gY()-mPoints[i]->gR()< walls.gYu() || currentPosition.gY()+mPoints[i]->gR()>walls.gYd()) {
+            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), -mPoints[i]->gVel().gY()));
+        }
+    }
+}
+
+void System::collision(){
+    /*
+     *
+     * SORT the mPoints
+     * Consider to write a function insertion_sort() instead of using qsort of the STL
+     * because the array is will be partially sorted
+     *
+     */
+
+    std::sort(mPoints.cbegin(), mPoints.cend(),[](MPoint* a, MPoint* b){
+        return a->gPos().gX() < b->gPos().gY();
+    });
+
+    for (int i = 0; i < mPoints.size(); ++i) {
+        for (int j = i+1 ; (j < mPoints.size()) && ((mPoints[i]->gPos().gX() + mPoints[i]->gR()) > (mPoints[j]->gPos().gX() - mPoints[j]->gR())) ; ++j) {
+            //solve collisions between the two
+            //Collision(MPoints[i], Mpoints[j]);
+        }
+    }
+
+
 
 }

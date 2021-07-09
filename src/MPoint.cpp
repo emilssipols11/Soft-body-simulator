@@ -57,7 +57,7 @@ void MPoint::attach_spring(Spring& s) {
 lmh::Vector2f MPoint::diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const {
 
     return lmh::Vector2f(
-            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() + lmh::Vector2f(100, 100)
+            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() + lmh::Vector2f(0, 500)
 
     );
 
