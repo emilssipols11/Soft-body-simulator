@@ -3,6 +3,7 @@
 #include "MPoint.h"
 #include <SFML/Graphics.hpp>
 #include <algorithm>
+#include <cmath>
 
 //initialize the system
 System::System()  {
@@ -89,6 +90,7 @@ void System::simulatev2(const double &max_time) {
 
     //END OF INITIALIZATION
 
+    //initialize the window
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
 
     window.setFramerateLimit(30);
@@ -97,6 +99,8 @@ void System::simulatev2(const double &max_time) {
     sf::CircleShape centre(20,10);
     centre.setFillColor(sf::Color::Cyan);
 
+
+    //initialize the walls
     double offset = 20.0;
     Walls walls(window);
 
@@ -225,7 +229,7 @@ void System::collision(){
      *
      */
 
-    std::sort(mPoints.cbegin(), mPoints.cend(),[](MPoint* a, MPoint* b){
+    std::sort(mPoints.begin(), mPoints.end(),[](MPoint* a, MPoint* b){
         return a->gPos().gX() < b->gPos().gY();
     });
 
@@ -237,5 +241,37 @@ void System::collision(){
     }
 
 
+}
+
+void System::collision(int const& a, int const& b){
+    float xik = mPoints[a]->gPos().gX() - mPoints[b]->gPos().gX();
+    float yik = mPoints[a]->gPos().gY() - mPoints[b]->gPos().gY();
+    float rik = sqrt(xik*xik + yik*yik);
+
+    //check if they really collide
+    if (rik < (mPoints[a]->gR() + mPoints[b]->gR())){
+        //now update the parameters
+        float xiku = xik / rik;
+        float yiku = yik / rik;
+
+        //change in velocity
+        float dv = xiku * (mPoints[a]->gVel().gX() - mPoints[b]->gVel().gX()) +
+                yiku * (mPoints[a]->gVel().gY() - mPoints[b]->gVel().gY() );
+
+        //update the velocity
+        mPoints[b]->sVel({mPoints[b]->gVel().gX() + xiku*dv,
+                          mPoints[b]->gVel().gY() + yiku*dv});
+        mPoints[a]->sVel({mPoints[a]->gVel().gX() - xiku*dv,
+                          mPoints[a]->gVel().gY() - yiku*dv});
+        //CHECK IF ONE MUST UPDATE THE POSITION
+        //USING POS+=VEL
+        //(THIS TASK SHOULD NORMALLY BE DONE BY THE RK4 METHOD)
+
+        //update the position so that two mPoints
+        //do not stay in collision for 2 consecutive frames
+        mPoints[a]->sPos({mPoints[a]->gPos().gX() + (mPoints[a]->gR()+mPoints[b]->gR()-rik)*xiku,mPoints[a]->gPos().gY() + (mPoints[a]->gR()+mPoints[b]->gR()-rik)*yiku});
+        mPoints[b]->sPos({mPoints[b]->gPos().gX() - (mPoints[a]->gR()+mPoints[b]->gR()-rik)*xiku,mPoints[b]->gPos().gY() - (mPoints[a]->gR()+mPoints[b]->gR()-rik)*yiku});
+
+    }
 
 }

@@ -40,6 +40,10 @@ private:
 
     void collision();
 
+    //solve the collision between the two
+    //MPoints with two indices
+    void collision(int const&, int const&);
+
     //method that computes the position, the velocity
     //using the RK4 method
     void compute_RK4(std::vector<std::array<lmh::Vector2f, 5>>&, std::vector<std::array<lmh::Vector2f, 5>> &,
