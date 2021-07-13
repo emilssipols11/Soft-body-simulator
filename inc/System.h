@@ -5,6 +5,7 @@
 #ifndef SOFT_BODY_SIMULATOR_SYSTEM_H
 #define SOFT_BODY_SIMULATOR_SYSTEM_H
 #include "Dipole.h"
+#include "Walls.h"
 
 class System{
 public:
@@ -24,13 +25,20 @@ public:
     //delete the with "new" allocated MPoints* in the std::vector
     ~System();
 
+
+
 private:
 
     //compute the geometric centre
     lmh::Vector2f geom_centre();
 
-    // colision with surrounding objects
-    void collisionObjects();
+    // colision with the walls
+    void collision(Walls &walls);
+
+    //collision() function overloading with Mpoints itself
+    //we use sweep and prune method
+
+    void collision();
 
     //method that computes the position, the velocity
     //using the RK4 method
