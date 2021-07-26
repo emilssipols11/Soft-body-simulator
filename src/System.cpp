@@ -1,5 +1,4 @@
 #include "System.h"
-#include <fstream>
 #include "MPoint.h"
 #include <SFML/Graphics.hpp>
 #include <algorithm>
@@ -93,11 +92,11 @@ void System::simulatev2(const double &max_time) {
     //initialize the window
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
 
-    window.setFramerateLimit(25);
-    std::ofstream file("../../system.txt");
+    window.setFramerateLimit(60);
 
-    sf::CircleShape centre(20,10);
-    centre.setFillColor(sf::Color::Cyan);
+    //the geometric center
+    //sf::CircleShape centre(20,10);
+    //centre.setFillColor(sf::Color::Cyan);
 
 
     //initialize the walls
@@ -126,15 +125,12 @@ void System::simulatev2(const double &max_time) {
 
         walls.draw_walls(offset);
 
-
-        centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
-
-        window.draw(centre);
+        //for the center of mass:
+            //centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
+            //window.draw(centre);
 
         window.display();
         window.clear();
-        file<<time<<"\t"<<this->total_kinetic()<<"\n";
-
         time+=dt;
 
     }
