@@ -93,7 +93,7 @@ void System::simulatev2(const double &max_time) {
     //initialize the window
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML is superior!");
 
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(25);
     std::ofstream file("../../system.txt");
 
     sf::CircleShape centre(20,10);
@@ -116,14 +116,16 @@ void System::simulatev2(const double &max_time) {
         }
 
         for (int i = 0; i < mPoints.size(); ++i) {
-            mPoints[i]->sDrawable(10, 7);
+            mPoints[i]->sDrawable(20, 10);
             mPoints[i]->draw(&window);
             springs[i].draw(&window);
         }
 
         collision(walls);
+        collision();
 
         walls.draw_walls(offset);
+
 
         centre.setPosition(this->geom_centre().gX(), this->geom_centre().gY());
 
@@ -236,7 +238,7 @@ void System::collision(){
     for (int i = 0; i < mPoints.size(); ++i) {
         for (int j = i+1 ; (j < mPoints.size()) && ((mPoints[i]->gPos().gX() + mPoints[i]->gR()) > (mPoints[j]->gPos().gX() - mPoints[j]->gR())) ; ++j) {
             //solve collisions between the two
-            //Collision(MPoints[i], Mpoints[j]);
+            collision(i, j);
         }
     }
 
