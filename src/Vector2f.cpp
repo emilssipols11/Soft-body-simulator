@@ -150,9 +150,9 @@ lmh::Vector2f& lmh::Vector2f::operator=(Vector2f &&vec) noexcept {
  }
 
 lmh::Vector2f lmh::Vector2f::normalize() {
-    this->x = (this->x)*(1/(this->norm()));
-    this->y = (this->y)*(1/(this->norm()));
-
+    double norm = this->norm();
+    this->x = (this->x)*(1/norm);
+    this->y = (this->y)*(1/norm);
     return (*this);
 }
 

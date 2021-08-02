@@ -8,6 +8,9 @@ Spring::Spring(const double &k, const double& damping,const double &l0) : k(k), 
 
     lines.resize(2);
     lines.setPrimitiveType(sf::LineStrip);
+    lines[0].color = sf::Color::Red;
+    lines[1].color = sf::Color::Red;
+
     this->is_drawed = false;
 
 }

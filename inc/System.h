@@ -44,10 +44,24 @@ private:
     //MPoints with two indices
     void collision(int const&, int const&);
 
+    //simply checks if the mPoint and the obstacle really collides...
+    bool does_collide(const int &i, const int &j);
+
+    //overriding two collision() function to solve
+    //the collision with the obstacles
+    void collision(int const&, Obstacle*);
+
     //method that computes the position, the velocity
     //using the RK4 method
     void compute_RK4(std::vector<std::array<lmh::Vector2f, 5>>&, std::vector<std::array<lmh::Vector2f, 5>> &,
     std::vector<std::array<lmh::Vector2f, 2>> & );
+
+    /*
+     * Function that configure the initial configuration
+     * */
+    void config_1();
+
+
 
     /*
      * DATA
@@ -55,11 +69,18 @@ private:
 
     //time increment
     double dt = 0.01;
+    double WIDTH = 1920;
+    double HEIGHT = 1080;
+    double offset = 20;
+
+
 
     // the mass points
     // and the springs
     std::vector<MPoint*> mPoints;
     std::vector<Spring> springs;
+    std::vector<Obstacle> obstacles;
+
 };
 
 

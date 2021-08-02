@@ -1,14 +1,15 @@
 //
 // Created by leo on 4/20/21.
 //
-
-
-#ifndef SOFT_BODY_SIMULATOR_MPOINT_H
-#define SOFT_BODY_SIMULATOR_MPOINT_H
 #include "Vector2f.h"
 #include <vector>
 #include <array>
 #include <SFML/Graphics.hpp>
+#include "Obstacle.h"
+
+#ifndef SOFT_BODY_SIMULATOR_MPOINT_H
+#define SOFT_BODY_SIMULATOR_MPOINT_H
+
 
 class Spring;
 
@@ -43,12 +44,19 @@ public:
     void attach_spring(Spring& s);
 
     //we set the specs for the circle that will be drawed
-    void sDrawable(float radius,int point_count);
+    void sDrawable();
     void draw(sf::RenderWindow* w) ;
     lmh::Vector2f diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const;
     inline double gR(){return this->circle.getRadius(); };
+    void sR(const float &r){ this->circle.setRadius(r); };
+
+    double get_distance(const Obstacle& obst);
+
+
 
 private:
+    static float GRAVITY;
+
     //vector of attached
     std::vector<Spring> attached;
     lmh::Vector2f position;
@@ -58,8 +66,15 @@ private:
     double damping;
     sf::CircleShape circle;
 
+    //absolute value function for double...
+    inline double abs(const double &d){
+        return (d>=0 ? d : -d);
+    }
+
+
 
 
 };
+
 
 #endif //SOFT_BODY_SIMULATOR_MPOINT_H
