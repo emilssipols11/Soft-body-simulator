@@ -16,7 +16,7 @@ class MPoint{
 
 public:
     //constructor takes all the parameters using the constructor
-    MPoint(lmh::Vector2f  pos, lmh::Vector2f  vel, lmh::Vector2f  force, const double& m);
+    MPoint(lmh::Vector2f  pos, lmh::Vector2f  vel, lmh::Vector2f  force, const double& m, const double &d=0.0);
 
     //default constructor
     MPoint() = default;
@@ -34,19 +34,13 @@ public:
         return this->damping;
     }
 
-
-
     lmh::Vector2f gPos() const;
     lmh::Vector2f gVel() const;
     lmh::Vector2f gForce();
-    lmh::Vector2f gForce(const lmh::Vector2f& dx, const lmh::Vector2f& dv) ;
     double gMass() const;
 
     //set the attached springs to a masspoint
     void attach_spring(Spring& s);
-    std::array<lmh::Vector2f, 2> comp_next(const int&);
-    std::array<lmh::Vector2f, 2> comp_nextv2(const int&);
-
 
     //we set the specs for the circle that will be drawed
     void sDrawable(float radius,int point_count);
