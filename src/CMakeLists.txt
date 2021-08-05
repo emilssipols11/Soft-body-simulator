@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Sources main.cpp
         Vector2f.cpp Vector3f.cpp  MPoint.cpp
-        Spring.cpp  Dipole.cpp System.cpp Window.cpp ../inc/Shader.h Shader.cpp VertexBuffer.cpp ../inc/VertexBuffer.h ../inc/VertexArray.h VertexArray.cpp VertexBufferLayout.cpp ../inc/VertexBufferLayout.h IndexBuffer.cpp ../inc/IndexBuffer.h)
+        Spring.cpp  Dipole.cpp System.cpp Window.cpp ../inc/Shader.h Shader.cpp VertexBuffer.cpp ../inc/VertexBuffer.h ../inc/VertexArray.h VertexArray.cpp VertexBufferLayout.cpp ../inc/VertexBufferLayout.h IndexBuffer.cpp ../inc/IndexBuffer.h Walls.cpp ../inc/Walls.h)
 
 include_directories(
         "../inc"
