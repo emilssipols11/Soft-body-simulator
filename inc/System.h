@@ -4,8 +4,12 @@
 
 #ifndef SOFT_BODY_SIMULATOR_SYSTEM_H
 #define SOFT_BODY_SIMULATOR_SYSTEM_H
-#include "Dipole.h"
 #include "Walls.h"
+#include "Vector2f.h"
+#include "Obstacle.h"
+
+class MPoint;
+class Spring;
 
 class System{
 public:
@@ -61,6 +65,8 @@ private:
      * */
     void config_1();
 
+    void draw_text(const double &time, sf::Text *text ,sf::RenderWindow &w);
+
 
 
     /*
@@ -68,18 +74,17 @@ private:
      */
 
     //time increment
-    double dt = 0.01;
+    double dt = 0.005;
     double WIDTH = 1920;
     double HEIGHT = 1080;
     double offset = 20;
 
 
-
     // the mass points
     // and the springs
     std::vector<MPoint*> mPoints;
-    std::vector<Spring> springs;
-    std::vector<Obstacle> obstacles;
+    std::vector<Spring*> springs;
+    std::vector<Obstacle*> obstacles;
 
 };
 

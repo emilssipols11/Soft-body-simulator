@@ -63,6 +63,8 @@ private:
 
     bool is_drawed ;
     sf::VertexArray lines;
+    static const double max_k;
 };
+
 
 #endif //SOFT_BODY_SIMULATOR_SPRING_H

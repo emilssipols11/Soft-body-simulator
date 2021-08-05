@@ -3,66 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <cmath>
+#include <sstream>
+#include "Spring.h"
 
 
 //initialize the system
 System::System()  {
 
-    MPoint *mp1 = new MPoint(lmh::Vector2f(0.0 + 400, 120.0 + 400), lmh::Vector2f(0.0 ,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint *mp2 = new MPoint(lmh::Vector2f(0.0 + 400, 70 + 480), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint *mp3 = new MPoint(lmh::Vector2f(103.9230484541326376116 + 400, 60.0 + 400), lmh::Vector2f(0.0,0.0), lmh::Vector2f(0.0,0.0), 10);
-    MPoint* mp4 = new MPoint(lmh::Vector2f(0.0+550, 440.0), lmh::Vector2f(0.0, 0.0), lmh::Vector2f(0.0, 0.0), 10);
-
-    Spring spr1(100.0, 3, 100.0);
-    Spring spr2(100.0, 3, 100.0);
-    Spring spr3 (100.0, 3, 100.0);
-    Spring spr4(500.0, 3, 50.0);
-    //Spring spr5(100.0, 3, 100.0);
-
-    spr1.sA(mp1);
-    spr1.sB(mp2);
-    spr2.sA(mp2);
-    spr2.sB(mp3);
-    spr3.sA(mp3);
-    spr3.sB(mp1);
-    spr4.sA(mp4);
-    spr4.sB(mp1);
-    //spr5.sA(mp4);
-    //spr5.sB(mp3);
-
-    mp1->attach_spring(spr1);
-    mp1->attach_spring(spr3);
-    mp1->attach_spring(spr4);
-    mp2->attach_spring(spr1);
-    mp2->attach_spring(spr2);
-    mp3->attach_spring(spr3);
-    mp3->attach_spring(spr2);
-    //mp3->attach_spring(spr5);
-    mp4->attach_spring(spr4);
-    //mp4->attach_spring(spr5);
-
-    mPoints.push_back(mp1);
-    mPoints.push_back(mp2);
-    mPoints.push_back(mp3);
-    mPoints.push_back(mp4);
-
-    springs.push_back(spr1);
-    springs.push_back(spr2);
-    springs.push_back(spr3);
-    springs.push_back(spr4);
-    //springs.push_back(spr5);
-
-    mp1->sDamp(1.7);
-    mp2->sDamp(1.8);
-    mp3->sDamp(1.9);
-    mp4->sDamp(0.99);
-
-    //INITIALOZE OBSTACLES
-    for (int i = 0; i <mPoints.size() ; ++i) {
-        mPoints[i]->sR(20.0);
-    }
-
-
+    //The constructor initializes the system using the config1() method
+    config_1();
 
 
 }
@@ -73,7 +22,7 @@ System::System()  {
             E_cin += (mPoints[i]->gVel()).norm()*(mPoints[i]->gVel()).norm() * 0.5;
         }
         for (int i = 0; i < springs.size(); ++i) {
-            E_cin+=springs[i].gEnergy();
+            E_cin+=springs[i]->gEnergy();
         }
         return E_cin;
 }
@@ -99,21 +48,25 @@ void System::simulatev2(const double &max_time) {
 
     //END OF INITIALIZATION
 
-    //initialize the window
+    //initialize the window and related things such as the text
     sf::RenderWindow window(sf::VideoMode((int)WIDTH, (int)HEIGHT), "SFML is superior!");
 
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(120);
 
+    sf::Text*text = new sf::Text[2];
+    sf::Font font;
+    if (!font.loadFromFile("../../arial.ttf"))
+    {
+        std::cerr<<"ERROR LOADING FONT\n";
+    }
+    text[0].setFont(font);
+    text[1].setFont(font);
 
 
     //initialize the walls
     double offset = 20.0;
     Walls walls(window);
 
-    Obstacle ob1(offset, window.getSize().y/2.0, window.getSize().x/4.0, window.getSize().y - window.getSize().y/1.5 - offset , &window);
-    Obstacle ob2(window.getSize().x-offset, window.getSize().y/2.0, (-1)*(window.getSize().x/4.0), window.getSize().y - window.getSize().y/1.5 - offset , &window);
-    obstacles.push_back(ob1);
-    obstacles.push_back(ob2);
 
 
     while (window.isOpen()){
@@ -123,8 +76,18 @@ void System::simulatev2(const double &max_time) {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed){
                 window.close();
+            }
+            if(event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Up){
+                    MPoint::GRAVITY+=5;
+                }
+                if (event.key.code == sf::Keyboard::Down){
+                    MPoint::GRAVITY-=5;
+                }
+            }
+
         }
 
         for (int i = 0; i < mPoints.size(); ++i) {
@@ -133,17 +96,19 @@ void System::simulatev2(const double &max_time) {
         }
 
         for (int i = 0; i < springs.size(); ++i) {
-            springs[i].draw(&window);
+            springs[i]->draw(&window);
         }
 
         for (int i = 0; i < obstacles.size(); ++i) {
-            obstacles[i].draw(window);
+            obstacles[i]->draw(window);
         }
 
+        draw_text(time, text, window);
 
         walls.draw_walls(offset);
         collision(walls);
         collision();
+
 
 
         window.display();
@@ -151,6 +116,8 @@ void System::simulatev2(const double &max_time) {
         time+=dt;
 
     }
+
+    delete[] text;
 
 }
 
@@ -171,6 +138,12 @@ System::~System()
     for (int i = 0; i < this->mPoints.size(); ++i) {
         delete mPoints[i];
     }
+    for (int i = 0; i < this->springs.size(); ++i) {
+        delete springs[i];
+    }
+    for (int i = 0; i < this->obstacles.size() ;++i) {
+        delete obstacles[i];
+    }
 
 }
 
@@ -179,24 +152,24 @@ void System::collision(Walls &walls) {
     for (int i = 0; i < mPoints.size(); ++i) {
         currentPosition = mPoints[i]->gPos();
         if (currentPosition.gX()-mPoints[i]->gR()< walls.gXl() ) {
-            mPoints[i]->sVel(lmh::Vector2f(-mPoints[i]->gVel().gX(), mPoints[i]->gVel().gY()));
+            mPoints[i]->sVel(lmh::Vector2f((-mPoints[i]->gVel().gX())*mPoints[i]->get_elasticity(), mPoints[i]->gVel().gY()));
             //correct the position
             mPoints[i]->sPos({walls.gXl()+mPoints[i]->gR(), mPoints[i]->gPos().gY()});
         }
         if(currentPosition.gX()+mPoints[i]->gR()>walls.gXr()) {
-            mPoints[i]->sVel(lmh::Vector2f(-mPoints[i]->gVel().gX(), mPoints[i]->gVel().gY()));
+            mPoints[i]->sVel(lmh::Vector2f((-mPoints[i]->gVel().gX())*mPoints[i]->get_elasticity(), mPoints[i]->gVel().gY()));
             //correct the position
             mPoints[i]->sPos({walls.gXr()-mPoints[i]->gR(), mPoints[i]->gPos().gY()});
 
 
         }
         if (currentPosition.gY()-mPoints[i]->gR()< walls.gYu()){
-            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), -mPoints[i]->gVel().gY()));
+            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), (-mPoints[i]->gVel().gY()))*mPoints[i]->get_elasticity());
             mPoints[i]->sPos({mPoints[i]->gPos().gX(), walls.gYu()+mPoints[i]->gR()});
 
         }
         if (currentPosition.gY()+mPoints[i]->gR()>walls.gYd()) {
-            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), -mPoints[i]->gVel().gY()));
+            mPoints[i]->sVel(lmh::Vector2f(mPoints[i]->gVel().gX(), (-mPoints[i]->gVel().gY())*mPoints[i]->get_elasticity()));
             mPoints[i]->sPos({mPoints[i]->gPos().gX(), walls.gYd()-mPoints[i]->gR()});
 
         }
@@ -239,7 +212,7 @@ void System::collision(){
             if (does_collide(i, j)){
                 //RESOLVE COLLISION BY UPDATING THE VELOCITIES
 
-                collision(i, &obstacles[j]);
+                collision(i, obstacles[j]);
 
 
             }
@@ -287,11 +260,11 @@ bool System::does_collide(const int &i, const int &j) {
     //in order to collide the center of the mPoint must be at least in the distance of
     //R of the line generated by the obstacle
 
-    if (mPoints[i]->get_distance(obstacles[j]) <= mPoints[i]->gR()){
+    if (mPoints[i]->get_distance(*obstacles[j]) <= mPoints[i]->gR()){
 
-        lmh::Vector2f diff = mPoints[i]->gPos() - obstacles[j].origin;
-        lmh::Vector2f vec_unit = obstacles[j].vector.normalize(obstacles[j].vector);
-        double vec_lenght = obstacles[j].vector.norm();
+        lmh::Vector2f diff = mPoints[i]->gPos() - obstacles[j]->origin;
+        lmh::Vector2f vec_unit = obstacles[j]->vector.normalize(obstacles[j]->vector);
+        double vec_lenght = obstacles[j]->vector.norm();
 
 
         bool left = ((diff).dot(vec_unit) <= -mPoints[i]->gR());
@@ -325,7 +298,7 @@ void System::collision(const int &i, Obstacle *p_obst) {
     lmh::Vector2f v_conserved = unit_col*(unit_col.dot(mPoints[i]->gVel()));
     lmh::Vector2f v_opposite = unit_normal*(-1)*(unit_normal.dot(mPoints[i]->gVel()));
 
-    mPoints[i]->sVel(v_conserved+v_opposite);
+    mPoints[i]->sVel((v_conserved+v_opposite)*mPoints[i]->get_elasticity());
 
     //rectify the position
 
@@ -394,106 +367,198 @@ void System::compute_RK4(std::vector<std::array<lmh::Vector2f, 5>> &koefsx, std:
 }
 
 void System::config_1() {
-    lmh::Vector2f start_point(100.0, 3*offset);
 
 
-    this->mPoints.resize(54);
-    int id = 0;
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < 9; ++j) {
-            mPoints[id] = new MPoint(lmh::Vector2f(start_point.gX() + 35*j, start_point.gY() + 30*i), lmh::Vector2f(0.0, 0.0), lmh::Vector2f(0.0, 0.0), 10, 0.1);
-            mPoints[id]->sR(8);
-        id++;
+    /****
+     ****
+     * INITIAL CONFIGURATION FOR THE BODY AND OBSTACLES
+     ****
+     ****
+     *****/
+
+
+    int num_of_balls_horizontal = 12;
+    int num_of_balls_vertical = 8;
+    double increment_horizontal = 40;
+    double increment_vertical = 40;
+    double starting_point_x = WIDTH/2 - (num_of_balls_horizontal/2)*increment_horizontal;
+    double starting_point_y = 2*offset;
+    double elasticity = 0.9;
+    lmh::Vector2f nul(0.0, 0.0);
+    for(int j=0; j<num_of_balls_vertical; ++j) {
+        for (int i = 0; i < num_of_balls_horizontal; ++i) {
+            mPoints.push_back(new MPoint(
+                    lmh::Vector2f(starting_point_x + i * increment_horizontal*1.5, starting_point_y + j * increment_vertical*1.5),
+                    nul, nul, 10, 0.2));
         }
-
     }
 
-    //this->springs.resize(48+54);
+    //springs for all near mPoints
+    for (int i = 0; i < (num_of_balls_horizontal-1)*num_of_balls_vertical; ++i) {
+        springs.push_back(new Spring(100, 0.0, increment_horizontal*1.5));
+    }
 
 
-    for (int i = 0; i < 48+45; ++i) {
-        if (i<48){
-            springs.emplace_back(500.0, 10, 35);
-
-        } else{
-            //springs.emplace_back(500.0, 10, 30);
+    //now attach all horizontal springs
+    int diff_offset = 0;
+    for (int i = 0; i < num_of_balls_vertical; ++i) {
+        for (int j = 0; j < (num_of_balls_horizontal-1); ++j) {
+            springs[j+num_of_balls_horizontal*i-diff_offset]->sA(mPoints[j+num_of_balls_horizontal*i]);
+            springs[j+num_of_balls_horizontal*i-diff_offset]->sB(mPoints[j+num_of_balls_horizontal*i + 1]);
         }
-
+        diff_offset++;
     }
-
-    id=0;
-
-    for(int j = 0; j<=7; ++j){
-        springs[j].sA(mPoints[j]);
-        springs[j].sB(mPoints[j+1]);
-    }
-
-    for(int j = 8; j<=15; ++j){
-        springs[j].sA(mPoints[j+1]);
-        springs[j].sB(mPoints[j+2]);
-    }
-
-    for(int j = 18; j<=23; ++j){
-        springs[j].sA(mPoints[j+2]);
-        springs[j].sB(mPoints[j+3]);
-    }
-    for(int j = 24; j<=31; ++j){
-        springs[j].sA(mPoints[j+3]);
-        springs[j].sB(mPoints[j+4]);
-    }
-    for(int j = 32; j<=39; ++j){
-        springs[j].sA(mPoints[j+4]);
-        springs[j].sB(mPoints[j+5]);
-    }
-    for(int j = 40; j<=47; ++j){
-        springs[j].sA(mPoints[j+5]);
-        springs[j].sB(mPoints[j+6]);
+    diff_offset = 0;
+    for (int i = 0; i < num_of_balls_vertical; ++i) {
+        for (int j = 0; j < (num_of_balls_horizontal-1); ++j) {
+            mPoints[j+num_of_balls_horizontal*i]->attach_spring(*springs[j+num_of_balls_horizontal*i-diff_offset]);
+            mPoints[j+num_of_balls_horizontal*i + 1]->attach_spring(*springs[j+num_of_balls_horizontal*i-diff_offset]);
+        }
+        diff_offset++;
     }
 
 
-
-    mPoints[0]->attach_spring(springs[0]);
-    for(int j = 1; j<8; ++j){
-        mPoints[j]->attach_spring(springs[j-1]);
-        mPoints[j]->attach_spring(springs[j]);
+    for (int i = 0; i < mPoints.size(); ++i) {
+        mPoints[i]->sR(10);
     }
-    mPoints[8]->attach_spring(springs[7]);
 
-    mPoints[9]->attach_spring(springs[8]);
-    for(int j = 10; j<17; ++j){
-        mPoints[j]->attach_spring(springs[j-2]);
-        mPoints[j]->attach_spring(springs[j-1]);
+    //create vertical spring connections
+    int temp_size_horozintal = springs.size();
+
+    for (int i = 0; i < num_of_balls_horizontal*(num_of_balls_vertical-1); ++i) {
+        springs.push_back(new Spring(1000, 0.0, increment_vertical*1.5));
     }
-    mPoints[17]->attach_spring(springs[15]);
 
-    mPoints[18]->attach_spring(springs[16]);
-    for(int j = 19; j<26; ++j){
-        mPoints[j]->attach_spring(springs[j-2]);
-        mPoints[j]->attach_spring(springs[j-3]);
+    diff_offset = 0;
+
+
+    for (int i = 0; i < num_of_balls_horizontal; ++i) {
+        for (int j = 0; j < (num_of_balls_vertical-1); ++j) {
+            springs[temp_size_horozintal+i*num_of_balls_vertical + j - diff_offset]->sA(mPoints[i + j*num_of_balls_horizontal ]);
+            springs[temp_size_horozintal+i*num_of_balls_vertical + j - diff_offset]->sB(mPoints[i + j*num_of_balls_horizontal + num_of_balls_horizontal]);
+
+        }
+        diff_offset++;
     }
-    mPoints[26]->attach_spring(springs[23]);
 
-    mPoints[27]->attach_spring(springs[24]);
-    for(int j = 28; j<35; ++j){
-        mPoints[j]->attach_spring(springs[j-3]);
-        mPoints[j]->attach_spring(springs[j-4]);
+    diff_offset = 0;
+
+    for (int i = 0; i < num_of_balls_horizontal; ++i) {
+        for (int j = 0; j < (num_of_balls_vertical-1); ++j) {
+            mPoints[i + j*num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal+i*num_of_balls_vertical+j-diff_offset]);
+            mPoints[i + j*num_of_balls_horizontal + num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal+i*num_of_balls_vertical+j-diff_offset]);
+        }
+        diff_offset++;
     }
-    mPoints[35]->attach_spring(springs[31]);
 
-    mPoints[36]->attach_spring(springs[32]);
-    for(int j = 37; j<44; ++j){
-        mPoints[j]->attach_spring(springs[j-4]);
-        mPoints[j]->attach_spring(springs[j-5]);
+    //create diagonal connections
+
+    temp_size_horozintal = springs.size();
+
+    //create extra springs of the same size
+    double square_root2 = sqrt(2);
+    for (int i = 0; i < (num_of_balls_horizontal-1)*(num_of_balls_vertical-1); ++i) {
+        springs.push_back(new Spring(10000, 0.0, increment_horizontal*1.5*square_root2));
     }
-    mPoints[44]->attach_spring(springs[39]);
 
-    mPoints[45]->attach_spring(springs[40]);
-    for(int j = 46; j<53; ++j){
-        mPoints[j]->attach_spring(springs[j-6]);
-        mPoints[j]->attach_spring(springs[j-7]);
+    diff_offset = 0;
+
+    for (int i = 0; i < (num_of_balls_vertical-1) ; ++i) {
+        for (int j = 0; j <(num_of_balls_horizontal-1) ; ++j) {
+            springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]->sA(mPoints[j+i*num_of_balls_horizontal]);
+            springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]->sB(mPoints[j+1+(i+1)*num_of_balls_horizontal]);
+
+        }
+        diff_offset+=1;
+
     }
-    mPoints[53]->attach_spring(springs[46]);
 
+    diff_offset = 0;
+
+    for (int i = 0; i < (num_of_balls_vertical-1) ; ++i) {
+        for (int j = 0; j <(num_of_balls_horizontal-1) ; ++j) {
+
+            mPoints[j+i*num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]);
+            mPoints[j+1+(i+1)*num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]);
+
+        }
+        diff_offset+=1;
+
+    }
+
+
+    temp_size_horozintal = springs.size();
+
+    for (int i = 0; i < (num_of_balls_horizontal-1)*(num_of_balls_vertical-1); ++i) {
+        springs.push_back(new Spring(10000, 0.0, increment_horizontal*1.5*square_root2));
+    }
+
+    diff_offset = 0;
+
+    for (int i = 0; i < (num_of_balls_vertical-1) ; ++i) {
+        for (int j = 0; j <(num_of_balls_horizontal-1) ; ++j) {
+            springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]->sA(mPoints[j+1+i*num_of_balls_horizontal]);
+            springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]->sB(mPoints[j+(i+1)*num_of_balls_horizontal]);
+
+        }
+        diff_offset+=1;
+
+    }
+
+    diff_offset = 0;
+
+    for (int i = 0; i < (num_of_balls_vertical-1) ; ++i) {
+        for (int j = 0; j <(num_of_balls_horizontal-1) ; ++j) {
+
+            mPoints[j+1+i*num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]);
+            mPoints[j+(i+1)*num_of_balls_horizontal]->attach_spring(*springs[temp_size_horozintal + j+i*num_of_balls_horizontal - diff_offset]);
+
+        }
+        diff_offset+=1;
+
+    }
+
+    //set the elasticity
+    for (int i = 0; i < mPoints.size(); ++i) {
+        mPoints[i]->sElasticity(0.7);
+    }
+
+    for (int i = 0; i < mPoints.size(); ++i) {
+        mPoints[i]->sDamp(0.5);
+    }
+
+    Obstacle* ob1 = new Obstacle(offset, HEIGHT/2.0, WIDTH - offset, HEIGHT/2.0 - offset*5  );
+    obstacles.push_back(ob1);
+    MPoint::GRAVITY = 150;
+
+
+
+
+ }
+
+void System::draw_text(const double &time, sf::Text *text ,sf::RenderWindow &w) {
+    std::stringstream type;
+    type<<time;
+    text[0].setString(type.str());
+    text[0].setCharacterSize(24);
+    text[0].setPosition(2*offset, 2*offset);
+    text[0].setFillColor(sf::Color::Yellow);
+    text[0].setStyle(sf::Text::Bold);
+
+    std::stringstream type2;
+    type2<<MPoint::GRAVITY;
+    text[1].setString("GRAVITY: " + type2.str() + " units\n\n\n" + "To change the gravity press\nthe Up or Down keys...");
+    text[1].setCharacterSize(24);
+    text[1].setPosition(2*offset, 150);
+    text[1].setFillColor(sf::Color::Yellow);
+    text[1].setStyle(sf::Text::Bold);
+
+
+
+
+    w.draw(text[1]);
+    w.draw(text[0]);
 
 
 }
+

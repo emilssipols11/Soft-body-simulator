@@ -11,6 +11,12 @@ Spring::Spring(const double &k, const double& damping,const double &l0) : k(k), 
     lines[0].color = sf::Color::Red;
     lines[1].color = sf::Color::Red;
 
+    if(k>max_k || k < 0.0){
+        std::cerr<<"THE SPRING COEFFICIENT IS TOO HIGH OR DOESNT WORK\n";
+        exit(0);
+    }
+
+
     this->is_drawed = false;
 
 }
@@ -60,4 +66,6 @@ double Spring::gEnergy() const {
     return  ((this->A->gPos() - this->B->gPos()).norm() - this->l0) *
             ((this->A->gPos() - this->B->gPos()).norm() - this->l0)   * this->k * 0.5;
 }
+
+const double Spring::max_k = 10000;
 

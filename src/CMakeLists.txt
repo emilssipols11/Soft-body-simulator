@@ -14,9 +14,9 @@ include_directories(
         #"${CMAKE_BINARY_DIR}/inc"
 )
 
-target_link_libraries(Sources -lglfw -lGLEW -lGL -lGLU -lsfml-graphics -lsfml-window -lsfml-system)
+target_link_libraries(Sources -lglfw -lGLEW -lGL  -lsfml-graphics -lsfml-window -lsfml-system)
 
-
+#-lGLU
 
 #Spring.h Dipole.h System.h MPoint.h
 

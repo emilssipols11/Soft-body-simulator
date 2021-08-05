@@ -3,7 +3,6 @@
 //
 #include "MPoint.h"
 #include "Spring.h"
-#include "Dipole.h"
 #include <utility>
 #include <cmath>
 
@@ -62,7 +61,7 @@ void MPoint::attach_spring(Spring& s) {
 lmh::Vector2f MPoint::diffeq(const lmh::Vector2f& target_pos, const lmh::Vector2f& current_pos, const lmh::Vector2f& target_vel ,const lmh::Vector2f& current_vel, const int& index) const {
 
     return lmh::Vector2f(
-            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() - velocity*damping + lmh::Vector2f(800, 10000)
+            ((target_pos-current_pos)*(this->attached[index].gl0()/(target_pos-current_pos).norm()) - (target_pos-current_pos))*this->attached[index].gK() - velocity*damping + lmh::Vector2f(0.0, GRAVITY )
 
     );
 
@@ -101,7 +100,16 @@ double MPoint::get_distance(const Obstacle& obst){ // the integer is to know wha
     double C = obst.vector.gX()*obst.origin.gY() - obst.vector.gY()*obst.origin.gX();
 
     double d = (abs(A*this->position.gX() + B*this->position.gY() + C))/(sqrt(A*A + B*B));
-    //std::cout<<this<<"\t"<<d<<"\n";
     return d;
 
 }
+
+double MPoint::get_elasticity() const {
+    return elasticity;
+}
+
+double MPoint::sElasticity(const double& el) {
+    this->elasticity = el;
+}
+
+double MPoint::GRAVITY = 100;

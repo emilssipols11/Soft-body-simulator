@@ -10,7 +10,7 @@
 #ifndef SOFT_BODY_SIMULATOR_MPOINT_H
 #define SOFT_BODY_SIMULATOR_MPOINT_H
 
-
+class System;
 class Spring;
 
 class MPoint{
@@ -51,12 +51,12 @@ public:
     void sR(const float &r){ this->circle.setRadius(r); };
 
     double get_distance(const Obstacle& obst);
-
+    double get_elasticity() const;
+    double sElasticity(const double&);
+    static double GRAVITY;
 
 
 private:
-    static float GRAVITY;
-
     //vector of attached
     std::vector<Spring> attached;
     lmh::Vector2f position;
@@ -65,6 +65,7 @@ private:
     double mass{};
     double damping;
     sf::CircleShape circle;
+    double elasticity = 1.0;
 
     //absolute value function for double...
     inline double abs(const double &d){

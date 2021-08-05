@@ -13,7 +13,7 @@
 
 struct Obstacle{
 
-    Obstacle(const double& a, const double& b, const double& c,const double &d,sf::RenderWindow* w): origin(a,b), vector(c,d), w(w){
+    Obstacle(const double& a, const double& b, const double& c,const double &d): origin(a,b), vector(c,d){
         lines.resize(2);
         lines.setPrimitiveType(sf::LineStrip);
     };
@@ -23,7 +23,7 @@ struct Obstacle{
     lmh::Vector2f origin;
     lmh::Vector2f vector;
     sf::VertexArray lines;
-    sf::RenderWindow *w;
+
 };
 
 #endif //SOFT_BODY_SIMULATOR_OBSTACLE_H
